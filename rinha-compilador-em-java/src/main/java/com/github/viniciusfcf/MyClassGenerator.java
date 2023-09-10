@@ -40,7 +40,7 @@ public class MyClassGenerator {
 				"       print(\"Hello Vinicius\"); \n" +
 				"       print(first(new Tupla(1,2))); \n" +
 				"       print(second(new Tupla(1,2))); \n" +
-				"       print(second(1)); \n" +
+//				"       print(second(1)); \n" +
 				"    }" +
 				"}";
 		

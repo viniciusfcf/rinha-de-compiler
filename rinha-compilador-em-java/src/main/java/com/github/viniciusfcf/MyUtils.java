@@ -11,7 +11,7 @@ public class MyUtils {
 			Tupla t = (Tupla) o;
 			return t.first;
 		}
-		throw new RuntimeException("Não é uma Tupla Sr.");
+		throw new RuntimeException("first: Não é uma Tupla Sr.");
 	}
 	
 	public static Object second(Object o) {
@@ -19,7 +19,7 @@ public class MyUtils {
 			Tupla t = (Tupla) o;
 			return t.second;
 		}
-		throw new RuntimeException("Não é uma Tupla Sr.");
+		throw new RuntimeException("second: Não é uma Tupla Sr.");
 	}
 	
 	
