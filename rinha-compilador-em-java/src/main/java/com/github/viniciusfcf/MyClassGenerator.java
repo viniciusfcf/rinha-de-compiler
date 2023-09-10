@@ -19,7 +19,12 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import static com.github.viniciusfcf.MyUtils.*;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+import com.github.viniciusfcf.generated.ArrayInitLexer;
+import com.github.viniciusfcf.generated.ArrayInitParser;
 
 @SuppressWarnings("unused")
 public class MyClassGenerator {
@@ -32,6 +37,18 @@ public class MyClassGenerator {
 	
 	
 	public static void main(String[] args) throws Exception {
+		
+		String arrayContent = 	"{1,2,3,5}";
+		ArrayInitLexer lexer = new ArrayInitLexer(CharStreams.fromString(arrayContent));
+		
+        // create a buffer of tokens pulled from the lexer
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        // create a parser that feeds off the tokens buffer
+        ArrayInitParser parser = new ArrayInitParser(tokens);
+
+        ParseTree tree = parser.init(); // begin parsing at init rule
+        System.out.println(tree.toStringTree(parser)); // print LISP-style tree
 		
 		String code = "import com.github.viniciusfcf.Tupla;"+
 				"import static com.github.viniciusfcf.MyUtils.*;"+
@@ -50,7 +67,7 @@ public class MyClassGenerator {
 		
 		Class<?> javaDemoClass = load();
 		run(javaDemoClass, "run"); 
-	}
+	}	
 
 	private static void run(Class<?> javaDemoClass, String methodName)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
