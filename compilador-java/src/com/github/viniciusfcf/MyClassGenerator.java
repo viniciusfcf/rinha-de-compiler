@@ -1,9 +1,9 @@
 package com.github.viniciusfcf;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -38,23 +38,25 @@ public class MyClassGenerator {
 		
 		//----------------
 		
-		Class javaDemoClass = load();
+		Class<?> javaDemoClass = load();
 		run(javaDemoClass, "run"); 
 	}
 
-	private static void run(Class javaDemoClass, String methodName)
+	private static void run(Class<?> javaDemoClass, String methodName)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		Method method = javaDemoClass.getMethod(methodName);
 		method.invoke(null);
 	}
 
-	private static Class load() throws MalformedURLException, ClassNotFoundException {
+	private static Class<?> load() throws ClassNotFoundException, IOException {
 		ClassLoader classLoader = MyClassGenerator.class.getClassLoader();
-		URLClassLoader urlClassLoader = new URLClassLoader(
+		try(URLClassLoader urlClassLoader = new URLClassLoader(
 				new URL[] { temp.toUri().toURL() },
-				classLoader);
-		Class javaDemoClass = urlClassLoader.loadClass(className);
-		return javaDemoClass;
+				classLoader);) {
+			Class<?> javaDemoClass = urlClassLoader.loadClass(className);
+			return javaDemoClass;
+		}
+		
 	}
 	
 	public static void compile(String code) throws Exception {
@@ -87,7 +89,7 @@ public class MyClassGenerator {
 		// The compile task is called
 		task.call();
 		// Printing of any compile problems
-		for (Diagnostic diagnostic : diagnostics.getDiagnostics())
+		for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics())
 			System.out.format("Error on line %d in %s%n",
 					diagnostic.getLineNumber(),
 					diagnostic.getSource());
