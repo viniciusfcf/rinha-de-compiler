@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Locale;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -18,19 +19,28 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import static com.github.viniciusfcf.MyUtils.*;
 
+@SuppressWarnings("unused")
 public class MyClassGenerator {
 
 	static final String className = "javademo";
+	
+	Tupla t;
 	
 	static Path temp = Paths.get(System.getProperty("java.io.tmpdir"), className);
 	
 	
 	public static void main(String[] args) throws Exception {
 		
-		String code = "public class " + className + " {" +
+		String code = "import com.github.viniciusfcf.Tupla;"+
+				"import static com.github.viniciusfcf.MyUtils.*;"+
+				"public class " + className + " {" +
 				"public static void run() {\n" +
-				"       System.out.println(\"Hello Vinicius\"); \n" +
+				"       print(\"Hello Vinicius\"); \n" +
+				"       print(first(new Tupla(1,2))); \n" +
+				"       print(second(new Tupla(1,2))); \n" +
+				"       print(second(1)); \n" +
 				"    }" +
 				"}";
 		
@@ -49,7 +59,7 @@ public class MyClassGenerator {
 	}
 
 	private static Class<?> load() throws ClassNotFoundException, IOException {
-		ClassLoader classLoader = MyClassGenerator.class.getClassLoader();
+		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 		try(URLClassLoader urlClassLoader = new URLClassLoader(
 				new URL[] { temp.toUri().toURL() },
 				classLoader);) {
@@ -89,11 +99,12 @@ public class MyClassGenerator {
 		// The compile task is called
 		task.call();
 		// Printing of any compile problems
-		for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics())
-			System.out.format("Error on line %d in %s%n",
+		for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
+			System.out.format("Error on line %d in %s%n %s",
 					diagnostic.getLineNumber(),
-					diagnostic.getSource());
-
+					diagnostic.getSource(),
+					diagnostic.getMessage(Locale.US));
+		}
 		// Close the compile resources
 		fileManager.close();
 	}
