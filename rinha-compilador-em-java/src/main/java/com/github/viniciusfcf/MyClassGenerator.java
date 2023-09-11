@@ -23,8 +23,8 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import com.github.viniciusfcf.generated.ArrayInitLexer;
-import com.github.viniciusfcf.generated.ArrayInitParser;
+import com.github.viniciusfcf.generated.RinhaLangLexer;
+import com.github.viniciusfcf.generated.RinhaLangParser;
 
 @SuppressWarnings("unused")
 public class MyClassGenerator {
@@ -39,16 +39,18 @@ public class MyClassGenerator {
 	public static void main(String[] args) throws Exception {
 		
 		String arrayContent = 	"{1,2,3,5}";
-		ArrayInitLexer lexer = new ArrayInitLexer(CharStreams.fromString(arrayContent));
+		RinhaLangLexer lexer = new RinhaLangLexer(CharStreams.fromFileName("input.isi"));
 		
         // create a buffer of tokens pulled from the lexer
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         // create a parser that feeds off the tokens buffer
-        ArrayInitParser parser = new ArrayInitParser(tokens);
-        parser.addParseListener(new MyArrayIntListener());
+        RinhaLangParser parser = new RinhaLangParser(tokens);
 
-        ParseTree tree = parser.init(); // begin parsing at init rule
+        ParseTree tree = parser.prog(); // begin parsing at init rule
+        parser.exibeComandos();
+		
+		parser.generateCode();
         
         System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         
@@ -57,18 +59,18 @@ public class MyClassGenerator {
         
         
         
-        String expressionContent = 	"5 * ( 1+3)";
-		ArrayInitLexer expressionLexer = new ArrayInitLexer(CharStreams.fromString(expressionContent));
-		
-        // create a buffer of tokens pulled from the lexer
-        CommonTokenStream expressionTokens = new CommonTokenStream(expressionLexer);
-
-        // create a parser that feeds off the tokens buffer
-        ArrayInitParser expressionParser = new ArrayInitParser(expressionTokens);
-        expressionParser.addParseListener(new MyArrayIntListener());
-
-        ParseTree expressionTree = expressionParser.expression(); // begin parsing at expression rule
-        System.out.println(expressionTree.toStringTree(expressionParser)); // print LISP-style tree
+//        String expressionContent = 	"5 * ( 1+3)";
+//		ArrayInitLexer expressionLexer = new ArrayInitLexer(CharStreams.fromString(expressionContent));
+//		
+//        // create a buffer of tokens pulled from the lexer
+//        CommonTokenStream expressionTokens = new CommonTokenStream(expressionLexer);
+//
+//        // create a parser that feeds off the tokens buffer
+//        ArrayInitParser expressionParser = new ArrayInitParser(expressionTokens);
+//        expressionParser.addParseListener(new MyArrayIntListener());
+//
+//        ParseTree expressionTree = expressionParser.expression(); // begin parsing at expression rule
+//        System.out.println(expressionTree.toStringTree(expressionParser)); // print LISP-style tree
         
         
         
