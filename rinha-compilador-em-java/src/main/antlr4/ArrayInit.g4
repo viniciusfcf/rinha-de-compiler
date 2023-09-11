@@ -14,3 +14,24 @@ value : init
 // parser rules start with lowercase letters, lexer rules with uppercase
 INT :   [0-9]+ ;             // Define token INT as one or more digits
 WS  :   [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
+
+expression : '(' expression ')' #parenthesisExp
+	| expression (ASTERISK|SLASH) expression #mulDivExp
+	| expression (PLUS|MINUS) expression #addSubExp
+	| <assoc=right> expression '^' expression #powerExp
+	| NAME '(' expression ')' #functionExp
+	| NUMBER #numericAtomExp
+	| ID #idAtomExp
+	;
+	
+fragment LETTER : [a-zA-Z] ;
+fragment DIGIT : [0-9] ;
+
+ASTERISK : '*' ;
+SLASH : '/' ;
+PLUS : '+' ;
+MINUS : '-' ;
+
+ID : LETTER DIGIT ;
+NAME : LETTER+ ;
+NUMBER : DIGIT+ ('.' DIGIT+)? ;

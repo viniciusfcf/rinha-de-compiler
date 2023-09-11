@@ -46,10 +46,38 @@ public class MyClassGenerator {
 
         // create a parser that feeds off the tokens buffer
         ArrayInitParser parser = new ArrayInitParser(tokens);
+        parser.addParseListener(new MyArrayIntListener());
 
         ParseTree tree = parser.init(); // begin parsing at init rule
+        
         System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+        
+
+		System.out.println("-------------------------");
+        
+        
+        
+        String expressionContent = 	"5 * ( 1+3)";
+		ArrayInitLexer expressionLexer = new ArrayInitLexer(CharStreams.fromString(expressionContent));
 		
+        // create a buffer of tokens pulled from the lexer
+        CommonTokenStream expressionTokens = new CommonTokenStream(expressionLexer);
+
+        // create a parser that feeds off the tokens buffer
+        ArrayInitParser expressionParser = new ArrayInitParser(expressionTokens);
+        expressionParser.addParseListener(new MyArrayIntListener());
+
+        ParseTree expressionTree = expressionParser.expression(); // begin parsing at expression rule
+        System.out.println(expressionTree.toStringTree(expressionParser)); // print LISP-style tree
+        
+        
+        
+        
+        
+        
+		System.out.println("-------------------------");
+        
+		System.out.println("-------------------------");
 		String code = "import com.github.viniciusfcf.Tupla;"+
 				"import static com.github.viniciusfcf.MyUtils.*;"+
 				"public class " + className + " {" +
