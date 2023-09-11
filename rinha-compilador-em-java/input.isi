@@ -9,10 +9,10 @@ programa
   a = 1 + 2 * 3 / b;
   
 
-  se ( a > b ) {
+  if ( a Gte b ) {
      escreva (a);
   }
-  senao {
+  else {
      escreva (b);
   }
   

@@ -1,16 +1,10 @@
 // Generated from RinhaLang.g4 by ANTLR 4.13.1
 package com.github.viniciusfcf.generated;
 
-	import com.github.viniciusfcf.datastructures.IsiSymbol;
-	import com.github.viniciusfcf.datastructures.IsiVariable;
-	import com.github.viniciusfcf.datastructures.IsiSymbolTable;
+	import com.github.viniciusfcf.datastructures.*;
 	import com.github.viniciusfcf.exceptions.IsiSemanticException;
-	import com.github.viniciusfcf.ast.IsiProgram;
-	import com.github.viniciusfcf.ast.AbstractCommand;
-	import com.github.viniciusfcf.ast.CommandLeitura;
-	import com.github.viniciusfcf.ast.CommandEscrita;
-	import com.github.viniciusfcf.ast.CommandAtribuicao;
-	import com.github.viniciusfcf.ast.CommandDecisao;
+	import com.github.viniciusfcf.ast.*;
+	import com.github.viniciusfcf.*;
 	import java.util.ArrayList;
 	import java.util.Stack;
 

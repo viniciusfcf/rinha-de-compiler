@@ -28,7 +28,7 @@ public class IsiProgram {
 		str.append("}");
 		
 		try {
-			FileWriter fr = new FileWriter(new File("MainClass.java"));
+			FileWriter fr = new FileWriter(new File("/home/vinicius/desenvolvimento/rinha-de-compiler/rinha-compilador-em-java/src/main/java/MainClass.java"));
 			fr.write(str.toString());
 			fr.close();
 		}

@@ -1,16 +1,10 @@
 // Generated from RinhaLang.g4 by ANTLR 4.13.1
 package com.github.viniciusfcf.generated;
 
-	import com.github.viniciusfcf.datastructures.IsiSymbol;
-	import com.github.viniciusfcf.datastructures.IsiVariable;
-	import com.github.viniciusfcf.datastructures.IsiSymbolTable;
+	import com.github.viniciusfcf.datastructures.*;
 	import com.github.viniciusfcf.exceptions.IsiSemanticException;
-	import com.github.viniciusfcf.ast.IsiProgram;
-	import com.github.viniciusfcf.ast.AbstractCommand;
-	import com.github.viniciusfcf.ast.CommandLeitura;
-	import com.github.viniciusfcf.ast.CommandEscrita;
-	import com.github.viniciusfcf.ast.CommandAtribuicao;
-	import com.github.viniciusfcf.ast.CommandDecisao;
+	import com.github.viniciusfcf.ast.*;
+	import com.github.viniciusfcf.*;
 	import java.util.ArrayList;
 	import java.util.Stack;
 
@@ -49,7 +43,7 @@ public class RinhaLangParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'programa'", "'fimprog;'", "'numero'", "'texto'", "'leia'", "'escreva'", 
-			"'se'", "'senao'", "'('", "')'", "';'", null, "'='", "','", "'{'", "'}'"
+			"'if'", "'else'", "'('", "')'", "';'", null, "'='", "','", "'{'", "'}'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -759,7 +753,7 @@ public class RinhaLangParser extends Parser {
 			 _exprDecision = _input.LT(-1).getText(); 
 			setState(94);
 			match(OPREL);
-			 _exprDecision += _input.LT(-1).getText(); 
+			 _exprDecision += MyOPREL.valueOf(_input.LT(-1).getText()).getJavaRepresentation(); 
 			setState(96);
 			_la = _input.LA(1);
 			if ( !(_la==ID || _la==NUMBER) ) {

@@ -1,16 +1,10 @@
 grammar RinhaLang;
 
 @header{
-	import com.github.viniciusfcf.datastructures.IsiSymbol;
-	import com.github.viniciusfcf.datastructures.IsiVariable;
-	import com.github.viniciusfcf.datastructures.IsiSymbolTable;
+	import com.github.viniciusfcf.datastructures.*;
 	import com.github.viniciusfcf.exceptions.IsiSemanticException;
-	import com.github.viniciusfcf.ast.IsiProgram;
-	import com.github.viniciusfcf.ast.AbstractCommand;
-	import com.github.viniciusfcf.ast.CommandLeitura;
-	import com.github.viniciusfcf.ast.CommandEscrita;
-	import com.github.viniciusfcf.ast.CommandAtribuicao;
-	import com.github.viniciusfcf.ast.CommandDecisao;
+	import com.github.viniciusfcf.ast.*;
+	import com.github.viniciusfcf.*;
 	import java.util.ArrayList;
 	import java.util.Stack;
 }
@@ -144,9 +138,9 @@ cmdattrib	:  ID { verificaID(_input.LT(-1).getText());
 			;
 			
 			
-cmdselecao  :  'se' AP
+cmdselecao  :  'if' AP
                     ID    { _exprDecision = _input.LT(-1).getText(); }
-                    OPREL { _exprDecision += _input.LT(-1).getText(); }
+                    OPREL { _exprDecision += MyOPREL.valueOf(_input.LT(-1).getText()).getJavaRepresentation(); }
                     (ID | NUMBER) {_exprDecision += _input.LT(-1).getText(); }
                     FP 
                     ACH 
@@ -159,7 +153,7 @@ cmdselecao  :  'se' AP
                     {
                        listaTrue = stack.pop();	
                     } 
-                   ('senao' 
+                   ('else' 
                    	 ACH
                    	 {
                    	 	curThread = new ArrayList<AbstractCommand>();
@@ -217,7 +211,7 @@ FCH  : '}'
      ;
 	 
 	 
-OPREL : '>' | '<' | '>=' | '<=' | '==' | '!='
+OPREL : 'Gt' | 'Lt' | 'Gte' | 'Lge' | 'Eq' | 'Neq'
       ;
       
 ID	: [a-z] ([a-z] | [A-Z] | [0-9])*

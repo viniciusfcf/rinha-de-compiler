@@ -31,7 +31,7 @@ public class MyClassGenerator {
 
 	static final String className = "javademo";
 	
-	Tupla t;
+//	Tupla t;
 	
 	static Path temp = Paths.get(System.getProperty("java.io.tmpdir"), className);
 	
