@@ -43,7 +43,7 @@ grammar RinhaLang;
 	}
 }
 
-prog	: 'programa' decl bloco  'fimprog;'
+prog	: decl bloco
            {  program.setVarTable(symbolTable);
            	  program.setComandos(stack.pop());
            	 
@@ -112,7 +112,7 @@ cmdleitura	: 'leia' AP
               }   
 			;
 			
-cmdescrita	: 'escreva' 
+cmdescrita	: 'print' 
                  AP 
                  ID { verificaID(_input.LT(-1).getText());
 	                  _writeID = _input.LT(-1).getText();
@@ -211,7 +211,7 @@ FCH  : '}'
      ;
 	 
 	 
-OPREL : 'Gt' | 'Lt' | 'Gte' | 'Lge' | 'Eq' | 'Neq'
+OPREL : 'Gt' | 'Lt' | 'Gte' | 'Lte' | 'Eq' | 'Neq'
       ;
       
 ID	: [a-z] ([a-z] | [A-Z] | [0-9])*

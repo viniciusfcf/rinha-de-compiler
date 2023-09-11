@@ -1,4 +1,3 @@
-programa
 
   numero a, b;
   texto  t1;
@@ -10,12 +9,9 @@ programa
   
 
   if ( a Gte b ) {
-     escreva (a);
+     print (a);
   }
   else {
-     escreva (b);
+     print (b);
   }
   
-  
-
-fimprog;
