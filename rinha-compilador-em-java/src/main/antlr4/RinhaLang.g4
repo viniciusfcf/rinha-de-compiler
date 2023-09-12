@@ -122,6 +122,18 @@ cmdescrita	: 'print'
                      } 
                     
                    |
+                   NUMBER{
+						_writeValue = 321;
+						}
+                   | 
+                   STR{
+						_writeValue = "String aqui";
+						}
+                   | 
+                   BOL{
+						_writeValue = true;
+						}
+                   | 
                    tupla{
 						_writeValue = new Tupla(1,2);
 						}
@@ -234,12 +246,16 @@ FCH  : '}'
 	 
 OPREL : 'Gt' | 'Lt' | 'Gte' | 'Lte' | 'Eq' | 'Neq'
       ;
-      
+
+BOL     : 'true' | 'false'
+		;
 ID	: [a-z] ([a-z] | [A-Z] | [0-9])*
 	;
 	
 NUMBER	: [0-9]+ ('.' [0-9]+)?
 		;
-
+STR     : '"' ([a-z] | [A-Z] | [0-9])* '"'
+ 		;
+ 		
 		
 WS	: (' ' | '\t' | '\n' | '\r') -> skip;
