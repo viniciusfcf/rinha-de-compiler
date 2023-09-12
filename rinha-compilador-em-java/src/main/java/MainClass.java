@@ -9,11 +9,13 @@ public class MainClass {
 		a = _key.nextDouble();
 		b = _key.nextDouble();
 		a = 1 + 2 * 3 / b;
+		System.out.println("(1, 2)");
 		if (a >= b) {
 			System.out.println(a);
 		} else {
 			System.out.println(b);
 		}
 
+		System.out.println("(1, 2)");
 	}
 }

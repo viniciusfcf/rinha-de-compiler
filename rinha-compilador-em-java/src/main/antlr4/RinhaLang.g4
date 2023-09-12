@@ -20,6 +20,7 @@ grammar RinhaLang;
 	private Stack<ArrayList<AbstractCommand>> stack = new Stack<ArrayList<AbstractCommand>>();
 	private String _readID;
 	private String _writeID;
+	private Object _writeValue;
 	private String _exprID;
 	private String _exprContent;
 	private String _exprDecision;
@@ -41,6 +42,7 @@ grammar RinhaLang;
 	public void generateCode(){
 		program.generateTarget();
 	}
+	
 }
 
 prog	: decl bloco
@@ -114,14 +116,27 @@ cmdleitura	: 'leia' AP
 			
 cmdescrita	: 'print' 
                  AP 
-                 ID { verificaID(_input.LT(-1).getText());
+                 (ID { verificaID(_input.LT(-1).getText());
 	                  _writeID = _input.LT(-1).getText();
+	                   _writeValue = null;
                      } 
+                    
+                   |
+                   tupla{
+						_writeValue = new Tupla(1,2);
+						}
+                   )
                  FP 
                  SC
                {
-               	  CommandEscrita cmd = new CommandEscrita(_writeID);
-               	  stack.peek().add(cmd);
+               		if(_writeValue != null) {
+               			CommandEscrita cmd = new CommandEscrita(_writeValue);
+               	  		stack.peek().add(cmd);
+               		}else {
+               			CommandEscrita cmd = new CommandEscrita(_writeID);
+               	  		stack.peek().add(cmd);
+               		}
+               	  
                }
 			;
 			
@@ -183,8 +198,14 @@ termo		: ID { verificaID(_input.LT(-1).getText());
               {
               	_exprContent += _input.LT(-1).getText();
               }
+            |
+              tupla
 			;
+
 			
+// TODO n ta do jeito que quero, mas ok
+tupla   : AP termo VIR termo FP {System.out.println("Li uma TUpla");}
+		;
 	
 AP	: '('
 	;
@@ -219,5 +240,6 @@ ID	: [a-z] ([a-z] | [A-Z] | [0-9])*
 	
 NUMBER	: [0-9]+ ('.' [0-9]+)?
 		;
+
 		
 WS	: (' ' | '\t' | '\n' | '\r') -> skip;
