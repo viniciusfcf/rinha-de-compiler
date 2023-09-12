@@ -56,7 +56,7 @@ decl    :  (declaravar)+
         ;
         
         
-declaravar :  tipo ID  {
+declaravar :  LET tipo ID  {
 	                  _varName = _input.LT(-1).getText();
 	                  _varValue = null;
 	                  symbol = new IsiVariable(_varName, _tipo, _varValue);
@@ -100,6 +100,12 @@ cmd		:  cmdleitura
  		|  cmdselecao  
 		;
 		
+		
+		
+funcao      : LET ID EQ FN AP ID (VIR ID)* NX ACH (cmd)+ FCH {System.out.println("Li uma Funcao");}
+			;
+
+
 cmdleitura	: 'leia' AP
                      ID { verificaID(_input.LT(-1).getText());
                      	  _readID = _input.LT(-1).getText();
@@ -214,17 +220,24 @@ termo		: ID { verificaID(_input.LT(-1).getText());
               tupla
 			;
 
+
 			
 // TODO n ta do jeito que quero, mas ok
 tupla   : AP termo VIR termo FP {System.out.println("Li uma TUpla");}
 		;
-	
+LET : 'let'
+	;
 AP	: '('
 	;
 	
 FP	: ')'
 	;
-	
+
+NX	: '=>'
+	;	
+
+FN	: 'fn'
+	;
 SC	: ';'
 	;
 	
