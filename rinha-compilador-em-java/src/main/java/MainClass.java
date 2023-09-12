@@ -2,6 +2,10 @@ import java.util.Scanner;
 
 public class MainClass {
 	public static void main(String args[]) {
+		new MainClass().run();
+	}
+
+	private void run() {
 		Scanner _key = new Scanner(System.in);
 		double a;
 		double b;
@@ -11,11 +15,16 @@ public class MainClass {
 		a = 1 + 2 * 3 / b;
 		System.out.println("(1, 2)");
 		if (a >= b) {
-			System.out.println(a);
+			System.out.println("a");
 		} else {
-			System.out.println(b);
+			System.out.println("b");
 		}
 
 		System.out.println("(1, 2)");
+		System.out.println(321);
+		System.out.println("String aqui");
+		System.out.println(true);
+		System.out.println(true);
+		System.out.println(321);
 	}
 }
