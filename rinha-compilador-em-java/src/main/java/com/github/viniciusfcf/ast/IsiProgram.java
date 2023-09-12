@@ -17,6 +17,9 @@ public class IsiProgram {
 		str.append("import java.util.Scanner;\n");
 		str.append("public class MainClass{ \n");
 		str.append("  public static void main(String args[]){\n ");
+		str.append("  new MainClass().run();\n } \n");
+		str.append(" private void run() {");
+		
 		str.append("      Scanner _key = new Scanner(System.in);\n");
 		for (IsiSymbol symbol: varTable.getAll()) {
 			str.append(symbol.generateJavaCode()+"\n");

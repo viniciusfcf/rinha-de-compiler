@@ -2,30 +2,34 @@ package com.github.viniciusfcf.ast;
 
 public class CommandEscrita extends AbstractCommand {
 
-	private Object id;
-	
+	private String id;
+
 	public CommandEscrita(Object id) {
-		this.id = "\""+id.toString()+"\"";
+		setId(id);
+
 	}
-	
-	public CommandEscrita(String id) {
-		this.id = id;
+
+	private void setId(Object id) {
+		if (id instanceof String) {
+			this.id = "\"" + id.toString() + "\"";
+		} else if (id instanceof Number) {
+			this.id = id.toString();
+		} else if (id instanceof Boolean) {
+			this.id = ((Boolean) id) ? "true" : "false";
+		} else {
+			this.id = "\"" + id.toString() + "\"";
+		}
 	}
-	
-	public CommandEscrita(Boolean id) {
-		this.id = id?"true":"false";
-	}
-	
-	
+
 	@Override
 	public String generateJavaCode() {
 		// TODO Auto-generated method stub
-		return "System.out.println("+id+");";
+		return "System.out.println(" + id + ");";
 	}
+
 	@Override
 	public String toString() {
 		return "CommandEscrita [id=" + id + "]";
 	}
-	
 
 }
