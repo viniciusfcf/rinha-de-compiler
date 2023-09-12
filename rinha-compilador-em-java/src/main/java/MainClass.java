@@ -15,16 +15,16 @@ public class MainClass {
 		a = 1 + 2 * 3 / b;
 		System.out.println("(1, 2)");
 		if (a >= b) {
-			System.out.println("a");
+			System.out.println(a);
 		} else {
-			System.out.println("b");
+			System.out.println(b);
 		}
 
 		System.out.println("(1, 2)");
-		System.out.println(321);
-		System.out.println("String aqui");
+		System.out.println(1);
+		System.out.println("a");
 		System.out.println(true);
-		System.out.println(true);
-		System.out.println(321);
+		System.out.println(false);
+		System.out.println(2332);
 	}
 }

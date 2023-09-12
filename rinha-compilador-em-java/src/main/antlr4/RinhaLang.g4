@@ -123,15 +123,15 @@ cmdescrita	: 'print'
                     
                    |
                    NUMBER{
-						_writeValue = 321;
+						_writeValue = Integer.valueOf(_input.LT(-1).getText());
 						}
                    | 
                    STR{
-						_writeValue = "String aqui";
+						_writeValue = _input.LT(-1).getText();
 						}
                    | 
                    BOL{
-						_writeValue = true;
+						_writeValue = Boolean.valueOf(_input.LT(-1).getText());
 						}
                    | 
                    tupla{

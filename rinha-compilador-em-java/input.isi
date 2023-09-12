@@ -20,4 +20,4 @@ print(1);
 print("a");
 print(true);
 print(false);
-print(1.2);
+print(2332);

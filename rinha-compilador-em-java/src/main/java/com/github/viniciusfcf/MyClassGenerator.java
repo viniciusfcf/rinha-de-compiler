@@ -38,7 +38,6 @@ public class MyClassGenerator {
 	
 	public static void main(String[] args) throws Exception {
 		
-		String arrayContent = 	"{1,2,3,5}";
 		RinhaLangLexer lexer = new RinhaLangLexer(CharStreams.fromFileName("input.isi"));
 		
         // create a buffer of tokens pulled from the lexer

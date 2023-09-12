@@ -11,7 +11,7 @@ public class CommandEscrita extends AbstractCommand {
 
 	private void setId(Object id) {
 		if (id instanceof String) {
-			this.id = "\"" + id.toString() + "\"";
+			this.id = id.toString();
 		} else if (id instanceof Number) {
 			this.id = id.toString();
 		} else if (id instanceof Boolean) {
