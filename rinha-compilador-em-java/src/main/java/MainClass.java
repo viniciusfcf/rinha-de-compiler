@@ -20,6 +20,18 @@ public class MainClass {
 			System.out.println(b);
 		}
 
+		if (1 >= 2) {
+			System.out.println(a);
+		} else {
+			System.out.println(b);
+		}
+
+		if (true) {
+			System.out.println(a);
+		} else {
+			System.out.println(b);
+		}
+
 		System.out.println("(1, 2)");
 		System.out.println(1);
 		System.out.println("a");

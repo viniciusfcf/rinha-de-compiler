@@ -15,6 +15,20 @@ print((1,2));
      print (b);
   }
   
+  if ( 1 Gte 2 ) {
+     print (a);
+  }
+  else {
+     print (b);
+  }
+  
+   if (true) {
+     print (a);
+  }
+  else {
+     print (b);
+  }
+  
 print((1,2));
 print(1);
 print("a");

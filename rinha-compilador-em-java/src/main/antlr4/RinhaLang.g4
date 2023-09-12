@@ -166,9 +166,9 @@ cmdattrib	:  ID { verificaID(_input.LT(-1).getText());
 			
 			
 cmdselecao  :  'if' AP
-                    ID    { _exprDecision = _input.LT(-1).getText(); }
-                    OPREL { _exprDecision += MyOPREL.valueOf(_input.LT(-1).getText()).getJavaRepresentation(); }
-                    (ID | NUMBER) {_exprDecision += _input.LT(-1).getText(); }
+                    (ID | NUMBER | BOL)    { _exprDecision = _input.LT(-1).getText(); }
+                    (OPREL { _exprDecision += MyOPREL.valueOf(_input.LT(-1).getText()).getJavaRepresentation(); }
+                    (ID | NUMBER | BOL){_exprDecision += _input.LT(-1).getText(); })? 
                     FP 
                     ACH 
                     { curThread = new ArrayList<AbstractCommand>(); 
