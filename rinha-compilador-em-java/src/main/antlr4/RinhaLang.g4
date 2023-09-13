@@ -50,8 +50,8 @@ grammar RinhaLang;
 		}
 	}
 	
-	public void generateCode(){
-		program.generateTarget();
+	public String generateCode(){
+		return program.generateTarget();
 	}
 	
 }

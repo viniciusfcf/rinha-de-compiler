@@ -14,16 +14,16 @@ public class IsiProgram {
 	private String programName;
 	private ArrayList<IsiMethod> metodos;
 
-	public void generateTarget() {
+	public String generateTarget() {
 		StringBuilder str = new StringBuilder();
 		str.append("import java.util.Scanner;\n");
 		str.append("public class MainClass{ \n");
 		str.append("  public static void main(String args[]){\n ");
-		str.append("  new MainClass().run();\n } \n");
+		str.append("  run();\n } \n");
 		
 		str.append(metodos());
 		
-		str.append(" private void run() {");
+		str.append(" public static void run() {");
 		
 		str.append("      Scanner _key = new Scanner(System.in);\n");
 		for (IsiSymbol symbol: varTable.getAll()) {
@@ -35,21 +35,23 @@ public class IsiProgram {
 		str.append("  }");
 		str.append("}");
 		
-		try {
-			FileWriter fr = new FileWriter(new File("/home/vinicius/desenvolvimento/rinha-de-compiler/rinha-compilador-em-java/src/main/java/MainClass.java"));
-			fr.write(str.toString());
-			fr.close();
+		String codigoGerado = str.toString();
+		try (FileWriter fr = new FileWriter(new File("/home/vinicius/desenvolvimento/rinha-de-compiler/rinha-compilador-em-java/src/main/java/MainClass.java"));
+				){
+			fr.write(codigoGerado);
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		return codigoGerado;
 
 	}
 
 	private String metodos() {
 		StringBuilder sb = new StringBuilder();
 		for (IsiMethod m : metodos) {
-			sb.append("private void ")
+			sb.append("private static void ")
 					.append(m.getName())
 					.append("(")
 					;

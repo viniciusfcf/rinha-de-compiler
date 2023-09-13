@@ -29,7 +29,7 @@ import com.github.viniciusfcf.generated.RinhaLangParser;
 @SuppressWarnings("unused")
 public class MyClassGenerator {
 
-	static final String className = "javademo";
+	static final String className = "MainClass";
 	
 //	Tupla t;
 	
@@ -50,9 +50,9 @@ public class MyClassGenerator {
         parser.exibeMetodos();
         parser.exibeComandos();
 		
-		parser.generateCode();
+		String code = parser.generateCode();
         
-        System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+//        System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         
 
 		System.out.println("-------------------------");
@@ -80,16 +80,16 @@ public class MyClassGenerator {
 		System.out.println("-------------------------");
         
 		System.out.println("-------------------------");
-		String code = "import com.github.viniciusfcf.Tupla;"+
-				"import static com.github.viniciusfcf.MyUtils.*;"+
-				"public class " + className + " {" +
-				"public static void run() {\n" +
-				"       print(\"Hello Vinicius\"); \n" +
-				"       print(first(new Tupla(1,2))); \n" +
-				"       print(second(new Tupla(1,2))); \n" +
-//				"       print(second(1)); \n" +
-				"    }" +
-				"}";
+//		String code = "import com.github.viniciusfcf.Tupla;"+
+//				"import static com.github.viniciusfcf.MyUtils.*;"+
+//				"public class " + className + " {" +
+//				"public static void run() {\n" +
+//				"       print(\"Hello Vinicius\"); \n" +
+//				"       print(first(new Tupla(1,2))); \n" +
+//				"       print(second(new Tupla(1,2))); \n" +
+////				"       print(second(1)); \n" +
+//				"    }" +
+//				"}";
 		
 		compile(code);
 		
