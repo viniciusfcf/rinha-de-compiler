@@ -1,7 +1,5 @@
 package com.github.viniciusfcf.ast;
 
-import com.github.viniciusfcf.datastructures.IsiVariable;
-
 public class CommandAtribuicao extends AbstractCommand{
 
 	private String id;

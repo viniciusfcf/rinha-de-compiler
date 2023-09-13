@@ -11,6 +11,7 @@ grammar RinhaLang;
 
 @members{
 	private int _tipo;
+	private String _nomeFuncao;
 	private String _varName;
 	private String _varValue;
 	private IsiSymbolTable symbolTable = new IsiSymbolTable();
@@ -24,8 +25,11 @@ grammar RinhaLang;
 	private String _exprID;
 	private String _exprContent;
 	private String _exprDecision;
+	private ArrayList<String> _parametros;
 	private ArrayList<AbstractCommand> listaTrue;
 	private ArrayList<AbstractCommand> listaFalse;
+	private ArrayList<IsiMethod> methods = new ArrayList<>();
+	
 	
 	public void verificaID(String id){
 		if (!symbolTable.exists(id)){
@@ -45,16 +49,37 @@ grammar RinhaLang;
 	
 }
 
-prog	: decl bloco
+prog	: (decl | funcao)+ bloco
            {  program.setVarTable(symbolTable);
            	  program.setComandos(stack.pop());
            	 
            } 
 		;
 		
+		
+funcao      : LET ID{
+	                  _nomeFuncao = _input.LT(-1).getText();} ATTR FN AP ID{
+	                  _parametros = new ArrayList<>();
+	                  _parametros.add(_input.LT(-1).getText());
+	                  } (VIR ID{ 
+	                  if(_parametros.contains(_input.LT(-1).getText())) {
+	                  	throw new IsiSemanticException("Parâmetro " + _input.LT(-1).getText() +" já foi declarado");
+	                  }
+	                  _parametros.add(_input.LT(-1).getText());}
+	                  
+	                  )* FP NX 
+				ACH{ curThread = new ArrayList<AbstractCommand>(); 
+                      stack.push(curThread);
+                    } 
+                    (cmd)+ FCH {System.out.println("Li a funcao: "+_nomeFuncao+" "+_parametros);}
+			;
+
 decl    :  (declaravar)+
-        ;
-        
+        ;	
+
+		
+
+
         
 declaravar :  LET tipo ID  {
 	                  _varName = _input.LT(-1).getText();
@@ -101,9 +126,6 @@ cmd		:  cmdleitura
 		;
 		
 		
-		
-funcao      : LET ID EQ FN AP ID (VIR ID)* NX ACH (cmd)+ FCH {System.out.println("Li uma Funcao");}
-			;
 
 
 cmdleitura	: 'leia' AP
@@ -223,7 +245,7 @@ termo		: ID { verificaID(_input.LT(-1).getText());
 
 			
 // TODO n ta do jeito que quero, mas ok
-tupla   : AP termo VIR termo FP {System.out.println("Li uma TUpla");}
+tupla   : AP termo VIR termo FP
 		;
 LET : 'let'
 	;
