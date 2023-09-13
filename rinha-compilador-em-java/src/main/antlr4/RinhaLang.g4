@@ -11,6 +11,7 @@ grammar RinhaLang;
 
 @members{
 	private int _tipo;
+	private boolean containsElse = false;
 	private String _nomeFuncao;
 	private String _varName;
 	private String _varValue;
@@ -64,7 +65,7 @@ prog	: (decl | funcao)+ bloco
 		;
 		
 		
-funcao      : LET ID{
+funcao      : LET ID{ 
 	                  _nomeFuncao = _input.LT(-1).getText();} ATTR FN AP ID{
 	                  _parametros = new ArrayList<>();
 	                  _parametros.add(_input.LT(-1).getText());
@@ -75,7 +76,9 @@ funcao      : LET ID{
 	                  _parametros.add(_input.LT(-1).getText());}
 	                  
 	                  )* FP NX 
-				ACH{ curThread = new ArrayList<AbstractCommand>(); 
+				ACH{
+				
+					curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);
                     } 
                     (cmd)+ FCH {
@@ -169,7 +172,7 @@ cmdleitura	: 'leia' AP
 			
 cmdescrita	: 'print' 
                  AP 
-                 (ID { verificaID(_input.LT(-1).getText());
+                 (ID { 
 	                  _writeID = _input.LT(-1).getText();
 	                   _writeValue = null;
                      } 
@@ -218,7 +221,8 @@ cmdattrib	:  ID { verificaID(_input.LT(-1).getText());
 			;
 			
 			
-cmdselecao  :  'if' AP
+cmdselecao  :  'if'{
+					containsElse = false;} AP
                     (ID | NUMBER | BOL)    { _exprDecision = _input.LT(-1).getText(); }
                     (OPREL { _exprDecision += MyOPREL.valueOf(_input.LT(-1).getText()).getJavaRepresentation(); }
                     (ID | NUMBER | BOL){_exprDecision += _input.LT(-1).getText(); })? 
@@ -233,16 +237,21 @@ cmdselecao  :  'if' AP
                     {
                        listaTrue = stack.pop();	
                     } 
-                   ('else' 
+                   ( ('else' 
                    	 ACH
                    	 {
                    	 	curThread = new ArrayList<AbstractCommand>();
                    	 	stack.push(curThread);
+                   	 	containsElse = true;
                    	 } 
                    	(cmd+) 
-                   	FCH
+                   	FCH)*
                    	{
-                   		listaFalse = stack.pop();
+                   		if(containsElse) {
+                   			listaFalse = stack.pop();
+                   		}else {
+                   			listaFalse = new ArrayList<>();
+                   		}
                    		CommandDecisao cmd = new CommandDecisao(_exprDecision, listaTrue, listaFalse);
                    		stack.peek().add(cmd);
                    	}

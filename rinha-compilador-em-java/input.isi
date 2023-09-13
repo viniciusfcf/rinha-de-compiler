@@ -1,6 +1,9 @@
 let fib = fn (n, m, o) => {
 print(true);
-print(2);
+print(3);
+if ( n Gte m ) {
+     print (n);
+  }
 }
   
 let numero a, b;
@@ -31,9 +34,6 @@ print((1,2));
   
    if (true) {
      print (a);
-  }
-  else {
-     print (b);
   }
   
 print((1,2));
