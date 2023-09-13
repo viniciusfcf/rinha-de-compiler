@@ -136,10 +136,22 @@ cmd		:  cmdleitura
  		|  cmdescrita 
  		|  cmdattrib
  		|  cmdselecao  
+ 		|  cmdcall  
 		;
 		
 		
-
+cmdcall	: ID { 
+                     	  _nomeFuncao = _input.LT(-1).getText();
+                        }  AP (ID{
+	                  _parametros = new ArrayList<>();
+	                  _parametros.add(_input.LT(-1).getText());
+	                  } (VIR ID{ 
+	                  _parametros.add(_input.LT(-1).getText());})*) FP SC{
+              	IsiVariable var = (IsiVariable)symbolTable.get(_readID);
+              	CommandCall cmd = new CommandCall(_nomeFuncao, _parametros);
+              	stack.peek().add(cmd);
+              }   
+		;
 
 cmdleitura	: 'leia' AP
                      ID { verificaID(_input.LT(-1).getText());

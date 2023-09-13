@@ -38,7 +38,7 @@ public class IsiVariable extends IsiSymbol {
 	public String generateJavaCode() {
        String str;
        if (type == NUMBER) {
-    	   str = "double ";
+    	   str = "int ";
        }
        else {
     	   str = "String ";

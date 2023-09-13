@@ -12,6 +12,8 @@ leia(b);
 a= 1 + 2 * 3 / b;
 a= 1;
   
+  
+fib(a,a,a);
 print((1,2));
   if ( a Gte b ) {
      print (a);
