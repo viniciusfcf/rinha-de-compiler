@@ -1,5 +1,6 @@
 let fib = fn (n, m, o) => {
 print(true);
+print(2);
 }
   
 let numero a, b;

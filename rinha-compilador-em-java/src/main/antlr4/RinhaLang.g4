@@ -43,6 +43,12 @@ grammar RinhaLang;
 		}
 	}
 	
+	public void exibeMetodos() {
+		for (IsiMethod m: program.getMetodos()) {
+			System.out.println(m);
+		}
+	}
+	
 	public void generateCode(){
 		program.generateTarget();
 	}
@@ -52,6 +58,7 @@ grammar RinhaLang;
 prog	: (decl | funcao)+ bloco
            {  program.setVarTable(symbolTable);
            	  program.setComandos(stack.pop());
+           	  program.setMetodos(methods);
            	 
            } 
 		;
@@ -71,7 +78,13 @@ funcao      : LET ID{
 				ACH{ curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);
                     } 
-                    (cmd)+ FCH {System.out.println("Li a funcao: "+_nomeFuncao+" "+_parametros);}
+                    (cmd)+ FCH {
+                    	System.out.println("Li a funcao: "+_nomeFuncao+" "+_parametros);
+                    	ArrayList<AbstractCommand> comandos = stack.peek();
+                    	System.out.println("Comandos: "+ comandos);
+                    	IsiMethod method = new IsiMethod(_nomeFuncao, _parametros, comandos);
+                    	methods.add(method);
+                   	}
 			;
 
 decl    :  (declaravar)+

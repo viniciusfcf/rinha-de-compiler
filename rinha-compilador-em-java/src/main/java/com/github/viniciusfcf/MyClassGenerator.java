@@ -47,6 +47,7 @@ public class MyClassGenerator {
         RinhaLangParser parser = new RinhaLangParser(tokens);
 
         ParseTree tree = parser.prog(); // begin parsing at init rule
+        parser.exibeMetodos();
         parser.exibeComandos();
 		
 		parser.generateCode();
