@@ -39,12 +39,14 @@ grammar RinhaLang;
 	}
 	
 	public void exibeComandos(){
+		System.out.println("exibeComandos");
 		for (AbstractCommand c: program.getComandos()){
 			System.out.println(c);
 		}
 	}
 	
 	public void exibeMetodos() {
+		System.out.println("exibeMetodos");
 		for (IsiMethod m: program.getMetodos()) {
 			System.out.println(m);
 		}
@@ -56,8 +58,10 @@ grammar RinhaLang;
 	
 }
 
-prog	: (decl | funcao)+ bloco
-           {  program.setVarTable(symbolTable);
+prog	: {System.out.println("inicializando programa");curThread = new ArrayList<AbstractCommand>(); 
+                      stack.push(curThread);}
+           (cmd | funcao)+ bloco
+           {  System.out.println("FINALIZANDO programa "+stack.size());System.out.println("FINALIZANDO programa "+stack);program.setVarTable(symbolTable);
            	  program.setComandos(stack.pop());
            	  program.setMetodos(methods);
            	 
@@ -81,55 +85,26 @@ funcao      : LET ID{
 					curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);
                     } 
-                    (cmd)+ FCH {
+                    (cmd)+ FCH SC{
                     	System.out.println("Li a funcao: "+_nomeFuncao+" "+_parametros);
-                    	ArrayList<AbstractCommand> comandos = stack.peek();
-                    	System.out.println("Comandos: "+ comandos);
+                    	ArrayList<AbstractCommand> comandos = stack.pop();
+                    	System.out.println("Comandos da funcao: "+ comandos);
                     	IsiMethod method = new IsiMethod(_nomeFuncao, _parametros, comandos);
                     	methods.add(method);
+                    	System.out.println("stack ao final da funcao"+ stack.size());
+                    	
                    	}
+                   	
 			;
 
-decl    :  (declaravar)+
-        ;	
 
-		
-
-
-        
-declaravar :  LET tipo ID  {
-	                  _varName = _input.LT(-1).getText();
-	                  _varValue = null;
-	                  symbol = new IsiVariable(_varName, _tipo, _varValue);
-	                  if (!symbolTable.exists(_varName)){
-	                     symbolTable.add(symbol);	
-	                  }
-	                  else{
-	                  	 throw new IsiSemanticException("Symbol "+_varName+" already declared");
-	                  }
-                    } 
-              (  VIR 
-              	 ID {
-	                  _varName = _input.LT(-1).getText();
-	                  _varValue = null;
-	                  symbol = new IsiVariable(_varName, _tipo, _varValue);
-	                  if (!symbolTable.exists(_varName)){
-	                     symbolTable.add(symbol);	
-	                  }
-	                  else{
-	                  	 throw new IsiSemanticException("Symbol "+_varName+" already declared");
-	                  }
-                    }
-              )* 
-               SC
-           ;
            
 tipo       : 'numero' { _tipo = IsiVariable.NUMBER;  }
            | 'texto'  { _tipo = IsiVariable.TEXT;  }
            ;
         
-bloco	: { curThread = new ArrayList<AbstractCommand>(); 
-	        stack.push(curThread);  
+bloco	: { 
+	        System.out.println("stack no inicio do bloco"+ stack.size());
           }
           (cmd)+
 		;
@@ -143,7 +118,7 @@ cmd		:  cmdleitura
 		;
 		
 		
-cmdcall	: ID { 
+cmdcall	: ID { System.out.println("cmdcall");
                      	  _nomeFuncao = _input.LT(-1).getText();
                         }  AP (ID{
 	                  _parametros = new ArrayList<>();
@@ -195,7 +170,7 @@ cmdescrita	: 'print'
 						}
                    )
                  FP 
-                 SC
+                 
                {
                		if(_writeValue != null) {
                			CommandEscrita cmd = new CommandEscrita(_writeValue);
@@ -208,17 +183,20 @@ cmdescrita	: 'print'
                }
 			;
 			
-cmdattrib	:  ID { verificaID(_input.LT(-1).getText());
-                    _exprID = _input.LT(-1).getText();
-                   } 
-               ATTR { _exprContent = ""; } 
+cmdattrib	:  LET ID  {
+	                  _varName = _input.LT(-1).getText();
+	                  System.out.println("===cmdattrib "+_varName);
+                    } 
+			  ATTR { _exprContent = ""; } 
                expr 
                SC
                {
-               	 CommandAtribuicao cmd = new CommandAtribuicao(_exprID, _exprContent);
+               	System.out.println("Stack size: "+stack.size());
+               	System.out.println("Stack: "+stack);
+               	 CommandAtribuicao cmd = new CommandAtribuicao(_varName, _exprContent);
                	 stack.peek().add(cmd);
                }
-			;
+           ;
 			
 			
 cmdselecao  :  'if'{
@@ -230,6 +208,7 @@ cmdselecao  :  'if'{
                     ACH 
                     { curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);
+                      System.out.println("stack no IF"+ stack.size());
                     }
                     (cmd)+ 
                     
@@ -254,6 +233,7 @@ cmdselecao  :  'if'{
                    		}
                    		CommandDecisao cmd = new CommandDecisao(_exprDecision, listaTrue, listaFalse);
                    		stack.peek().add(cmd);
+                   		System.out.println("stack no Fim do IF"+ stack.size());
                    	}
                    )?
             ;
@@ -264,7 +244,7 @@ expr		:  termo (
 	            )*
 			;
 			
-termo		: ID { verificaID(_input.LT(-1).getText());
+termo		: ID { 
 	               _exprContent += _input.LT(-1).getText();
                  } 
             | 

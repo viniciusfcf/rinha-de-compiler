@@ -26,9 +26,9 @@ public class IsiProgram {
 		str.append(" public static void run() {");
 		
 		str.append("      Scanner _key = new Scanner(System.in);\n");
-		for (IsiSymbol symbol: varTable.getAll()) {
-			str.append(symbol.generateJavaCode()+"\n");
-		}
+//		for (IsiSymbol symbol: varTable.getAll()) {
+//			str.append(symbol.generateJavaCode()+"\n");
+//		}
 		for (AbstractCommand command: comandos) {
 			str.append(command.generateJavaCode()+"\n");
 		}
