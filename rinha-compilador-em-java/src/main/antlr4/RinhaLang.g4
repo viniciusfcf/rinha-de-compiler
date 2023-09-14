@@ -27,6 +27,7 @@ grammar RinhaLang;
 	private String _exprContent;
 	private String _exprDecision;
 	private ArrayList<String> _parametros;
+	private ArrayList<String> _parametrosCall;
 	private ArrayList<AbstractCommand> listaTrue;
 	private ArrayList<AbstractCommand> listaFalse;
 	private ArrayList<IsiMethod> methods = new ArrayList<>();
@@ -121,12 +122,12 @@ cmd		:  cmdleitura
 cmdcall	: ID { System.out.println("cmdcall");
                      	  _nomeFuncao = _input.LT(-1).getText();
                         }  AP (ID{
-	                  _parametros = new ArrayList<>();
-	                  _parametros.add(_input.LT(-1).getText());
+	                  _parametrosCall = new ArrayList<>();
+	                  _parametrosCall.add(_input.LT(-1).getText());
 	                  } (VIR ID{ 
-	                  _parametros.add(_input.LT(-1).getText());})*) FP {
+	                  _parametrosCall.add(_input.LT(-1).getText());})*) FP {
               	IsiVariable var = (IsiVariable)symbolTable.get(_readID);
-              	CommandCall cmd = new CommandCall(_nomeFuncao, _parametros);
+              	CommandCall cmd = new CommandCall(_nomeFuncao, _parametrosCall);
               	stack.peek().add(cmd);
               }   
 		;

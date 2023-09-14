@@ -5,6 +5,7 @@ if ( n Gte m ) {
      print (n)
      
   }
+  fib(n,m,o)
 };
   
 
