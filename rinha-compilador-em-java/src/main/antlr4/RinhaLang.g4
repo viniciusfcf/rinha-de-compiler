@@ -12,6 +12,7 @@ grammar RinhaLang;
 @members{
 	private int _tipo;
 	private boolean containsElse = false;
+	private boolean metodoInterno = false;
 	private String _nomeFuncao;
 	private String _varName;
 	private String _varValue;
@@ -68,7 +69,7 @@ prog	: {curThread = new ArrayList<AbstractCommand>();
 		;
 		
 		
-funcao      : LET ID{ 
+funcao      : {System.out.println("lendo Metodo"); metodoInterno = true;}LET ID{ 
 	                  _nomeFuncao = _input.LT(-1).getText();} ATTR FN AP ID{
 	                  _parametros = new ArrayList<>();
 	                  _parametros.add(_input.LT(-1).getText());
@@ -78,17 +79,18 @@ funcao      : LET ID{
 	                  }
 	                  _parametros.add(_input.LT(-1).getText());}
 	                  
-	                  )* FP NX 
+	                  )* FP NX {System.out.println("lendo Metodo NX");}
 				ACH{
-				
+				System.out.println("lendo Metodo ACH");
 					curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);
                     } 
-                    (cmd)+ FCH SC{
+                    (cmd {System.out.println("Lendo comando no metodo "+_input.LT(-1).getText());})+ FCH SC{
+                    	System.out.println("FINAL DO METODO "+_nomeFuncao);
                     	ArrayList<AbstractCommand> comandos = stack.pop();
                     	IsiMethod method = new IsiMethod(_nomeFuncao, _parametros, comandos);
                     	methods.add(method);
-                    	
+                    	metodoInterno = false;
                    	}
                    	
 			;
@@ -100,23 +102,45 @@ tipo       : 'numero' { _tipo = IsiVariable.NUMBER;  }
            ;
         
 
-cmd		:  cmdleitura  
- 		|  cmdescrita 
- 		|  cmdattrib
- 		|  cmdselecao  
- 		|  cmdcall  
+cmd		:  cmdleitura  {System.out.println("cmdleitura");}
+ 		|  cmdescrita {System.out.println("cmdescrita");}
+ 		|  cmdattrib {System.out.println("cmdattrib");}
+ 		|  cmdselecao  {System.out.println("cmdselecao");}
+ 		|  cmdcall  {System.out.println("cmdcall1 "+_input.LT(-1).getText());}
 		;
 		
-		
+			
+expr		:  termo ( 
+	             (OP | OPREL)  { _exprContent += _input.LT(-1).getText();}
+	            termo
+	            )*
+			;
+			
+termo		: ID { 
+	               _exprContent += _input.LT(-1).getText();
+                 } 
+            | 
+              NUMBER
+              {
+              	_exprContent += _input.LT(-1).getText();
+              }
+            |
+              tupla
+            | 
+              cmdcall
+			;
+
+
 cmdcall	: ID { 
                      	  _nomeFuncao = _input.LT(-1).getText();
-                        }  AP (expr{
+                     	  System.out.println("CMD CALL!! "+_nomeFuncao +" INTERNO? "+metodoInterno);
+                        }  (AP (expr{
 	                  _parametrosCall = new ArrayList<>();
 	                  _parametrosCall.add(_input.LT(-1).getText());
 	                  } (VIR expr{ 
-	                  _parametrosCall.add(_input.LT(-1).getText());})*) FP {
+	                  _parametrosCall.add(_input.LT(-1).getText());})*) FP)* {
               	IsiVariable var = (IsiVariable)symbolTable.get(_readID);
-              	CommandCall cmd = new CommandCall(_nomeFuncao, _parametrosCall);
+              	CommandCall cmd = new CommandCall(_nomeFuncao, _parametrosCall, metodoInterno);
               	stack.peek().add(cmd);
               }   
 		;
@@ -202,15 +226,15 @@ cmdselecao  :  'if'{
                     {
                        listaTrue = stack.pop();	
                     } 
-                   ( ('else' 
+                   ('else' 
                    	 ACH
                    	 {
                    	 	curThread = new ArrayList<AbstractCommand>();
                    	 	stack.push(curThread);
                    	 	containsElse = true;
                    	 } 
-                   	(cmd+) 
-                   	FCH)*
+                   	(cmd)+ 
+                   	FCH)?
                    	{
                    		if(containsElse) {
                    			listaFalse = stack.pop();
@@ -220,29 +244,8 @@ cmdselecao  :  'if'{
                    		CommandDecisao cmd = new CommandDecisao(_exprDecision, listaTrue, listaFalse);
                    		stack.peek().add(cmd);
                    	}
-                   )?
+                   
             ;
-			
-expr		:  termo ( 
-	             OP  { _exprContent += _input.LT(-1).getText();}
-	            termo
-	            )*
-			;
-			
-termo		: ID { 
-	               _exprContent += _input.LT(-1).getText();
-                 } 
-            | 
-              NUMBER
-              {
-              	_exprContent += _input.LT(-1).getText();
-              }
-            |
-              tupla
-            | 
-              cmdcall
-			;
-
 
 			
 // TODO n ta do jeito que quero, mas ok

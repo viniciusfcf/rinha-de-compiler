@@ -4,18 +4,26 @@ import java.util.List;
 
 public class CommandCall extends AbstractCommand {
 
-	private String funcao;
-	private List<String> parameters;
+	private final String funcao;
+	private final List<String> parameters;
+	private final boolean metodoInterno;
 
-	public CommandCall(String funcao, List<String> parameters) {
+	public CommandCall(String funcao, List<String> parameters, boolean metodoInterno) {
 		this.funcao = funcao;
 		this.parameters = parameters;
+		this.metodoInterno = metodoInterno;
 	}
 
 	@Override
 	public String generateJavaCode() {
 		if(parameters == null || parameters.size() == 0) {
+			if(isMetodoInterno()) {
+				return "return (T)"+ funcao+";";
+			}
 			return funcao+"();";
+		}
+		if(isMetodoInterno()) {
+			return "return (T)"+ funcao+"(" + params()+ ");";
 		}
 		return funcao+"(" + params()+ ");";
 	}
@@ -28,9 +36,15 @@ public class CommandCall extends AbstractCommand {
 		return params.deleteCharAt(0).toString();
 	}
 
-	@Override
-	public String toString() {
-		return "CommandCall [id=" + funcao + ", parameters "+parameters+"]";
+	public boolean isMetodoInterno() {
+		return metodoInterno;
 	}
 
+	@Override
+	public String toString() {
+		return "CommandCall [funcao=" + funcao + ", parameters=" + parameters + ", metodoInterno=" + metodoInterno
+				+ "]";
+	}
+
+ 
 }
