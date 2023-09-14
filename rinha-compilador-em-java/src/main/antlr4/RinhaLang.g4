@@ -121,10 +121,10 @@ cmd		:  cmdleitura
 		
 cmdcall	: ID { System.out.println("cmdcall");
                      	  _nomeFuncao = _input.LT(-1).getText();
-                        }  AP (ID{
+                        }  AP (expr{
 	                  _parametrosCall = new ArrayList<>();
 	                  _parametrosCall.add(_input.LT(-1).getText());
-	                  } (VIR ID{ 
+	                  } (VIR expr{ 
 	                  _parametrosCall.add(_input.LT(-1).getText());})*) FP {
               	IsiVariable var = (IsiVariable)symbolTable.get(_readID);
               	CommandCall cmd = new CommandCall(_nomeFuncao, _parametrosCall);

@@ -3,9 +3,10 @@ print(true)
 print(3)
 if ( n Gte m ) {
      print (n)
+     fib(1,2,3)
      
   }
-  fib(n,m,o)
+  
 };
   
 
