@@ -61,7 +61,7 @@ grammar RinhaLang;
 
 prog	: {System.out.println("inicializando programa");curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);}
-           (cmd | funcao)+ bloco
+           (cmd | funcao)+ 
            {  System.out.println("FINALIZANDO programa "+stack.size());System.out.println("FINALIZANDO programa "+stack);program.setVarTable(symbolTable);
            	  program.setComandos(stack.pop());
            	  program.setMetodos(methods);
@@ -104,12 +104,6 @@ tipo       : 'numero' { _tipo = IsiVariable.NUMBER;  }
            | 'texto'  { _tipo = IsiVariable.TEXT;  }
            ;
         
-bloco	: { 
-	        System.out.println("stack no inicio do bloco"+ stack.size());
-          }
-          (cmd)+
-		;
-		
 
 cmd		:  cmdleitura  
  		|  cmdescrita 
@@ -304,7 +298,7 @@ ID	: [a-z] ([a-z] | [A-Z] | [0-9])*
 	
 NUMBER	: [0-9]+ ('.' [0-9]+)?
 		;
-STR     : '"' ([a-z] | [A-Z] | [0-9])* '"'
+STR     : '"' ([a-z] | [A-Z] | [0-9]| [ ])* '"'
  		;
  		
 		

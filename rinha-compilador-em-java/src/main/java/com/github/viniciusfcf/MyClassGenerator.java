@@ -121,7 +121,6 @@ public class MyClassGenerator {
 		Files.createDirectories(temp);
 		
 		Path javaSourceFile = Paths.get(temp.normalize().toAbsolutePath().toString(), className + ".java");
-		System.out.println("The java source file is loacted at "+javaSourceFile);
 		
 		Files.write(javaSourceFile, code.getBytes());
 		

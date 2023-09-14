@@ -5,18 +5,16 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 import com.github.viniciusfcf.datastructures.IsiMethod;
-import com.github.viniciusfcf.datastructures.IsiSymbol;
 import com.github.viniciusfcf.datastructures.IsiSymbolTable;
 
 public class IsiProgram {
 	private IsiSymbolTable varTable;
-	private ArrayList<AbstractCommand> comandos;
+	private ArrayList<AbstractCommand> comandos = new ArrayList<AbstractCommand>();
 	private String programName;
-	private ArrayList<IsiMethod> metodos;
+	private ArrayList<IsiMethod> metodos = new ArrayList<IsiMethod>();
 
 	public String generateTarget() {
 		StringBuilder str = new StringBuilder();
-		str.append("import java.util.Scanner;\n");
 		str.append("public class MainClass{ \n");
 		str.append("  public static void main(String args[]){\n ");
 		str.append("  run();\n } \n");
@@ -25,7 +23,6 @@ public class IsiProgram {
 		
 		str.append(" public static void run() {");
 		
-		str.append("      Scanner _key = new Scanner(System.in);\n");
 //		for (IsiSymbol symbol: varTable.getAll()) {
 //			str.append(symbol.generateJavaCode()+"\n");
 //		}
