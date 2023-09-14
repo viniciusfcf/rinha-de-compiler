@@ -96,14 +96,8 @@ funcao      : {System.out.println("lendo Metodo"); metodoInterno = true;}LET ID{
 			;
 
 
-           
-tipo       : 'numero' { _tipo = IsiVariable.NUMBER;  }
-           | 'texto'  { _tipo = IsiVariable.TEXT;  }
-           ;
-        
-
-cmd		:  cmdleitura  {System.out.println("cmdleitura");}
- 		|  cmdescrita {System.out.println("cmdescrita");}
+cmd		:  
+ 		  cmdescrita {System.out.println("cmdescrita");}
  		|  cmdattrib {System.out.println("cmdattrib");}
  		|  cmdselecao  {System.out.println("cmdselecao");}
  		|  cmdcall  {System.out.println("cmdcall1 "+_input.LT(-1).getText());}
@@ -145,19 +139,6 @@ cmdcall	: ID {
               }   
 		;
 
-cmdleitura	: 'leia' AP
-                     ID { verificaID(_input.LT(-1).getText());
-                     	  _readID = _input.LT(-1).getText();
-                        } 
-                     FP 
-                     SC 
-                     
-              {
-              	IsiVariable var = (IsiVariable)symbolTable.get(_readID);
-              	CommandLeitura cmd = new CommandLeitura(_readID, var);
-              	stack.peek().add(cmd);
-              }   
-			;
 			
 cmdescrita	: 'print' 
                  AP 
