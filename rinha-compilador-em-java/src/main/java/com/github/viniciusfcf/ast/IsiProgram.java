@@ -5,10 +5,8 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 import com.github.viniciusfcf.datastructures.IsiMethod;
-import com.github.viniciusfcf.datastructures.IsiSymbolTable;
 
 public class IsiProgram {
-	private IsiSymbolTable varTable;
 	private ArrayList<AbstractCommand> comandos = new ArrayList<AbstractCommand>();
 	private String programName;
 	private ArrayList<IsiMethod> metodos = new ArrayList<IsiMethod>();
@@ -65,14 +63,6 @@ public class IsiProgram {
 					sb.append("}\n");
 		}
 		return sb.toString();
-	}
-
-	public IsiSymbolTable getVarTable() {
-		return varTable;
-	}
-
-	public void setVarTable(IsiSymbolTable varTable) {
-		this.varTable = varTable;
 	}
 
 	public ArrayList<AbstractCommand> getComandos() {

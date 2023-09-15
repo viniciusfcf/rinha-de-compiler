@@ -16,8 +16,6 @@ grammar RinhaLang;
 	private String _nomeFuncao;
 	private String _varName;
 	private String _varValue;
-	private IsiSymbolTable symbolTable = new IsiSymbolTable();
-	private IsiSymbol symbol;
 	private IsiProgram program = new IsiProgram();
 	private ArrayList<AbstractCommand> curThread;
 	private Stack<ArrayList<AbstractCommand>> stack = new Stack<ArrayList<AbstractCommand>>();
@@ -33,12 +31,6 @@ grammar RinhaLang;
 	private ArrayList<AbstractCommand> listaFalse;
 	private ArrayList<IsiMethod> methods = new ArrayList<>();
 	
-	
-	public void verificaID(String id){
-		if (!symbolTable.exists(id)){
-			throw new IsiSemanticException("Symbol "+id+" not declared");
-		}
-	}
 	
 	public void exibeComandos(){
 		for (AbstractCommand c: program.getComandos()){
@@ -61,7 +53,7 @@ grammar RinhaLang;
 prog	: {curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);}
            (cmd | funcao)+ 
-           {  program.setVarTable(symbolTable);
+           {  
            	  program.setComandos(stack.pop());
            	  program.setMetodos(methods);
            	 
@@ -133,7 +125,6 @@ cmdcall	: ID {
 	                  _parametrosCall.add(_input.LT(-1).getText());
 	                  } (VIR expr{ 
 	                  _parametrosCall.add(_input.LT(-1).getText());})*) FP)* {
-              	IsiVariable var = (IsiVariable)symbolTable.get(_readID);
               	CommandCall cmd = new CommandCall(_nomeFuncao, _parametrosCall, metodoInterno);
               	stack.peek().add(cmd);
               }   
