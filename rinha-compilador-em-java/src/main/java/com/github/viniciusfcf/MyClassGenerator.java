@@ -57,24 +57,10 @@ public class MyClassGenerator {
 		String code = parser.generateCode();
         
         
-//		System.out.println("-------------------------");
-//		String code = "import com.github.viniciusfcf.Tupla;"+
-//				"import static com.github.viniciusfcf.MyUtils.*;"+
-//				"public class " + className + " {" +
-//				"public static void run() {\n" +
-//				"       print(\"Hello Vinicius\"); \n" +
-//				"       print(first(new Tupla(1,2))); \n" +
-//				"       print(second(new Tupla(1,2))); \n" +
-////				"       print(second(1)); \n" +
-//				"    }" +
-//				"}";
-		
-		compile(code);
-		
-		//----------------
-		
-		Class<?> javaDemoClass = load();
-		run(javaDemoClass, "run"); 
+//		compile(code);
+//		
+//		Class<?> javaDemoClass = load();
+//		run(javaDemoClass, "run"); 
 	}	
 
 	private static void run(Class<?> javaDemoClass, String methodName)
