@@ -13,6 +13,7 @@ public class IsiProgram {
 
 	public String generateTarget() {
 		StringBuilder str = new StringBuilder();
+		str.append("import com.github.viniciusfcf.Tupla;\n");
 		str.append("public class MainClass{ \n");
 		str.append("  public static void main(String args[]){\n ");
 		str.append("  run();\n } \n");

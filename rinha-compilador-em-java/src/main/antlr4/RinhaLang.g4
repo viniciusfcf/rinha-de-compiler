@@ -30,6 +30,9 @@ grammar RinhaLang;
 	private ArrayList<AbstractCommand> listaTrue;
 	private ArrayList<AbstractCommand> listaFalse;
 	private ArrayList<IsiMethod> methods = new ArrayList<>();
+	private String _tuplaContent1;
+	private String _tuplaContent2;
+	private String _tuplaExpr;
 	
 	
 	public void exibeComandos(){
@@ -111,9 +114,11 @@ termo		: ID {
               	_exprContent += _input.LT(-1).getText();
               }
             |
-              tupla
-            | 
-              cmdcall
+              tupla {
+              	System.out.println("TERMO!!! "+_exprContent);
+              	_exprContent += _tuplaExpr;
+              	System.out.println("TERMO!!! "+_exprContent);
+              }
 			;
 
 
@@ -152,8 +157,13 @@ cmdescrita	: 'print'
 						}
                    | 
                    tupla{
-						_writeValue = new Tupla(1,2);
+                   		System.out.println("_tuplaExpr: "+_tuplaExpr);
+						_writeValue = _tuplaExpr;
 						}
+					|
+					expr {
+						_writeValue = _exprContent;
+					}
                    )
                  FP 
                  
@@ -221,7 +231,7 @@ cmdselecao  :  'if'{
 
 			
 // TODO n ta do jeito que quero, mas ok
-tupla   : AP termo VIR termo FP
+tupla   : AP (ID | NUMBER){_tuplaContent1 =_input.LT(-1).getText();} VIR (ID | NUMBER){_tuplaContent2 = _input.LT(-1).getText();} FP {_tuplaExpr = "new Tupla("+_tuplaContent1+","+ _tuplaContent2+")";}
 		;
 LET : 'let'
 	;
