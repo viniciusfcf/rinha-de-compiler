@@ -96,10 +96,10 @@ cmd		:
 		;
 		
 			
-expr		:  termo ( 
-	             (OP | OPREL)  { _exprContent += _input.LT(-1).getText();}
+expr		:  termo{System.out.println("Leu um termo "+_exprContent);} ( 
+	             (OP | OPREL)  {System.out.println("Leu um termo1 "+_exprContent); _exprContent += _input.LT(-1).getText();System.out.println("Leu um termo2 "+_exprContent);}
 	            termo
-	            )*
+	            )*{System.out.println("Leu uma expressão "+_exprContent);}
 			;
 			
 termo		: ID { 
@@ -120,11 +120,11 @@ termo		: ID {
 cmdcall	: ID { 
                      	  _nomeFuncao = _input.LT(-1).getText();
                      	  System.out.println("CMD CALL!! "+_nomeFuncao +" INTERNO? "+metodoInterno);
-                        }  (AP (expr{
+                        }  (AP ({_exprContent = "";}expr{
 	                  _parametrosCall = new ArrayList<>();
-	                  _parametrosCall.add(_input.LT(-1).getText());
-	                  } (VIR expr{ 
-	                  _parametrosCall.add(_input.LT(-1).getText());})*) FP)* {
+	                  _parametrosCall.add(_exprContent);
+	                  } (VIR {_exprContent = "";}expr{ 
+	                  _parametrosCall.add(_exprContent);})*) FP)* {
               	CommandCall cmd = new CommandCall(_nomeFuncao, _parametrosCall, metodoInterno);
               	stack.peek().add(cmd);
               }   
