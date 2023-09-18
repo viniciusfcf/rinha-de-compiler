@@ -156,6 +156,10 @@ cmdescrita	: 'print'
 						_writeValue = Boolean.valueOf(_input.LT(-1).getText());
 						}
                    | 
+                   cmd{
+						_writeValue = stack.peek().remove(stack.peek().size()-1).generateJavaCode().replace(';', ' ');
+						}
+                   | 
                    tupla{
                    		System.out.println("_tuplaExpr: "+_tuplaExpr);
 						_writeValue = _tuplaExpr;

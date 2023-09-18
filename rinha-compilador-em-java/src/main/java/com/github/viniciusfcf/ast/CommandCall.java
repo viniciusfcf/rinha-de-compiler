@@ -18,12 +18,12 @@ public class CommandCall extends AbstractCommand {
 	public String generateJavaCode() {
 		if(parameters == null || parameters.size() == 0) {
 			if(isMetodoInterno()) {
-				return "return (T)"+ funcao+";";
+				return "return "+ funcao+";";
 			}
 			return funcao+"();";
 		}
 		if(isMetodoInterno()) {
-			return "return (T)"+ funcao+"(" + params()+ ");";
+			return "return "+ funcao+"(" + params()+ ");";
 		}
 		return funcao+"(" + params()+ ");";
 	}

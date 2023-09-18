@@ -47,7 +47,7 @@ public class IsiProgram {
 	private String metodos() {
 		StringBuilder sb = new StringBuilder();
 		for (IsiMethod m : metodos) {
-			sb.append("private static <T> T ")
+			sb.append("private static int ")
 					.append(m.getName())
 					.append("(")
 					;
