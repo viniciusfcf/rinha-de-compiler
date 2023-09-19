@@ -32,8 +32,8 @@ grammar RinhaLang;
 	private ArrayList<IsiMethod> methods = new ArrayList<>();
 	private String _tuplaContent1;
 	private String _tuplaContent2;
-	private AbstractCommand _cmdexpr1; 
-	private AbstractCommand _cmdexpr2;
+	private Object _cmdexpr1; 
+	private Object _cmdexpr2;
 	private String _cmdexprop;
 	
 	private String _tuplaExpr;
@@ -127,11 +127,24 @@ termo		: ID {
 			;
 
 
-cmdexpr: (cmdcall{System.out.println("cmdcall na expr1");_cmdexpr1 = stack.peek().remove(stack.peek().size()-1);}) (OP | OPREL){_cmdexprop = _input.LT(-1).getText();} (cmdcall{System.out.println("cmdcall na expr2");_cmdexpr2 = stack.peek().remove(stack.peek().size()-1);})
+cmdexpr: ( (cmdcall{System.out.println("cmdcall na expr1");_cmdexpr1 = stack.peek().remove(stack.peek().size()-1);}) | NUMBER{_cmdexpr1 = _input.LT(-1).getText();})(OP | OPREL){_cmdexprop = _input.LT(-1).getText();} ((cmdcall{System.out.println("cmdcall na expr2");_cmdexpr2 = stack.peek().remove(stack.peek().size()-1);} | | NUMBER{_cmdexpr2 = _input.LT(-1).getText();}))
 	{
-		CommandExpr cmd = new CommandExpr(_cmdexpr1, _cmdexprop, _cmdexpr2);
-              	stack.peek().add(cmd);
-              	System.out.println("CMDEXPR: "+ cmd.generateJavaCode());
+		String param1 = null;
+		String param2 = null;
+		if(_cmdexpr1 instanceof AbstractCommand ) {
+			param1 = ((AbstractCommand)_cmdexpr1).generateJavaCode().replace(";","").replaceFirst("return", "");
+		}else {
+			param1 = _cmdexpr1.toString();
+		}
+		if(_cmdexpr2 instanceof AbstractCommand ) {
+			param2 = ((AbstractCommand)_cmdexpr2).generateJavaCode().replaceFirst("return", "");
+		}else if(_cmdexpr2 != null){
+			param2 = _cmdexpr2.toString();
+		}
+		CommandExpr cmd = new CommandExpr(param1, _cmdexprop, param2);
+          	stack.peek().add(cmd);
+          	System.out.println("CMDEXPR1: "+ cmd.generateJavaCode());
+		
 	}
 		;
 

@@ -57,10 +57,10 @@ public class MyClassGenerator {
 		String code = parser.generateCode();
         
         
-//		compile(code);
-//		
-//		Class<?> javaDemoClass = load();
-//		run(javaDemoClass, "run"); 
+		compile(code);
+		
+		Class<?> javaDemoClass = load();
+		run(javaDemoClass, "run"); 
 	}	
 
 	private static void run(Class<?> javaDemoClass, String methodName)
