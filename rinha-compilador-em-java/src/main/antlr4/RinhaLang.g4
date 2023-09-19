@@ -32,6 +32,10 @@ grammar RinhaLang;
 	private ArrayList<IsiMethod> methods = new ArrayList<>();
 	private String _tuplaContent1;
 	private String _tuplaContent2;
+	private AbstractCommand _cmdexpr1; 
+	private AbstractCommand _cmdexpr2;
+	private String _cmdexprop;
+	
 	private String _tuplaExpr;
 	
 	
@@ -95,7 +99,8 @@ cmd		:
  		  cmdescrita {System.out.println("cmdescrita");}
  		|  cmdattrib {System.out.println("cmdattrib");}
  		|  cmdselecao  {System.out.println("cmdselecao");}
- 		|  cmdcall  {System.out.println("cmdcall1 "+_input.LT(-1).getText());}
+ 		|  cmdexpr  {System.out.println("cmdexpr");}
+ 		|  cmdcall  {System.out.println("cmdcall1 "+stack.peek().get(stack.peek().size()-1).generateJavaCode());}
 		;
 		
 			
@@ -122,6 +127,14 @@ termo		: ID {
 			;
 
 
+cmdexpr: (cmdcall{System.out.println("cmdcall na expr1");_cmdexpr1 = stack.peek().remove(stack.peek().size()-1);}) (OP | OPREL){_cmdexprop = _input.LT(-1).getText();} (cmdcall{System.out.println("cmdcall na expr2");_cmdexpr2 = stack.peek().remove(stack.peek().size()-1);})
+	{
+		CommandExpr cmd = new CommandExpr(_cmdexpr1, _cmdexprop, _cmdexpr1);
+              	stack.peek().add(cmd);
+              	System.out.println("CMDEXPR: "+ cmd.generateJavaCode());
+	}
+		;
+
 cmdcall	: ID { 
                      	  _nomeFuncao = _input.LT(-1).getText();
                      	  System.out.println("CMD CALL!! "+_nomeFuncao +" INTERNO? "+metodoInterno);
@@ -135,7 +148,7 @@ cmdcall	: ID {
               }   
 		;
 
-			
+
 cmdescrita	: 'print' 
                  AP 
                  (ID { 
