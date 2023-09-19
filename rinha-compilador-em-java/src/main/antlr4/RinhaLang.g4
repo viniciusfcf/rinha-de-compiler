@@ -68,7 +68,7 @@ prog	: {curThread = new ArrayList<AbstractCommand>();
 		;
 		
 		
-funcao      : {System.out.println("lendo Metodo"); metodoInterno = true;}LET ID{ 
+funcao      : {metodoInterno = true;}LET ID{ 
 	                  _nomeFuncao = _input.LT(-1).getText();} ATTR FN AP ID{
 	                  _parametros = new ArrayList<>();
 	                  _parametros.add(_input.LT(-1).getText());
@@ -78,14 +78,12 @@ funcao      : {System.out.println("lendo Metodo"); metodoInterno = true;}LET ID{
 	                  }
 	                  _parametros.add(_input.LT(-1).getText());}
 	                  
-	                  )* FP NX {System.out.println("lendo Metodo NX");}
+	                  )* FP NX 
 				ACH{
-				System.out.println("lendo Metodo ACH");
 					curThread = new ArrayList<AbstractCommand>(); 
                       stack.push(curThread);
                     } 
-                    (cmd {System.out.println("Lendo comando no metodo "+_input.LT(-1).getText());})+ FCH SC{
-                    	System.out.println("FINAL DO METODO "+_nomeFuncao);
+                    (cmd )+ FCH SC{
                     	ArrayList<AbstractCommand> comandos = stack.pop();
                     	IsiMethod method = new IsiMethod(_nomeFuncao, _parametros, comandos);
                     	methods.add(method);
@@ -96,18 +94,18 @@ funcao      : {System.out.println("lendo Metodo"); metodoInterno = true;}LET ID{
 
 
 cmd		:  
- 		  cmdescrita {System.out.println("cmdescrita");}
- 		|  cmdattrib {System.out.println("cmdattrib");}
- 		|  cmdselecao  {System.out.println("cmdselecao");}
- 		|  cmdexpr  {System.out.println("cmdexpr");}
- 		|  cmdcall  {System.out.println("cmdcall1 "+stack.peek().get(stack.peek().size()-1).generateJavaCode());}
+ 		  cmdescrita 
+ 		|  cmdattrib
+ 		|  cmdselecao 
+ 		|  cmdexpr 
+ 		|  cmdcall 
 		;
 		
 			
-expr		:  termo{System.out.println("Leu um termo "+_exprContent);} ( 
-	             (OP | OPREL)  {System.out.println("Leu um termo1 "+_exprContent); _exprContent += _input.LT(-1).getText();System.out.println("Leu um termo2 "+_exprContent);}
+expr		:  termo ( 
+	             (OP | OPREL)  { _exprContent += _input.LT(-1).getText();}
 	            termo
-	            )*{System.out.println("Leu uma expressão "+_exprContent);}
+	            )*
 			;
 			
 termo		: ID { 
@@ -120,14 +118,13 @@ termo		: ID {
               }
             |
               tupla {
-              	System.out.println("TERMO!!! "+_exprContent);
               	_exprContent += _tuplaExpr;
-              	System.out.println("TERMO!!! "+_exprContent);
               }
 			;
 
 
-cmdexpr: ( (cmdcall{System.out.println("cmdcall na expr1");_cmdexpr1 = stack.peek().remove(stack.peek().size()-1);}) | NUMBER{_cmdexpr1 = _input.LT(-1).getText();})(OP | OPREL){_cmdexprop = _input.LT(-1).getText();} ((cmdcall{System.out.println("cmdcall na expr2");_cmdexpr2 = stack.peek().remove(stack.peek().size()-1);} | | NUMBER{_cmdexpr2 = _input.LT(-1).getText();}))
+cmdexpr: ( (cmdcall{_cmdexpr2 = null;_cmdexprop = null;_cmdexpr1 = stack.peek().remove(stack.peek().size()-1);}) | NUMBER{_cmdexpr1 = _input.LT(-1).getText();})
+	((OP | OPREL){_cmdexprop = _input.LT(-1).getText();} (cmdcall{_cmdexpr2 = stack.peek().remove(stack.peek().size()-1);} | | NUMBER{_cmdexpr2 = _input.LT(-1).getText();}))?
 	{
 		String param1 = null;
 		String param2 = null;
@@ -141,16 +138,14 @@ cmdexpr: ( (cmdcall{System.out.println("cmdcall na expr1");_cmdexpr1 = stack.pee
 		}else if(_cmdexpr2 != null){
 			param2 = _cmdexpr2.toString();
 		}
-		CommandExpr cmd = new CommandExpr(param1, _cmdexprop, param2);
+		CommandExpr cmd = new CommandExpr(param1, _cmdexprop, param2, metodoInterno);
           	stack.peek().add(cmd);
-          	System.out.println("CMDEXPR1: "+ cmd.generateJavaCode());
 		
 	}
 		;
 
 cmdcall	: ID { 
                      	  _nomeFuncao = _input.LT(-1).getText();
-                     	  System.out.println("CMD CALL!! "+_nomeFuncao +" INTERNO? "+metodoInterno);
                         }  (AP ({_exprContent = "";}expr{
 	                  _parametrosCall = new ArrayList<>();
 	                  _parametrosCall.add(_exprContent);
@@ -187,7 +182,6 @@ cmdescrita	: 'print'
 						}
                    | 
                    tupla{
-                   		System.out.println("_tuplaExpr: "+_tuplaExpr);
 						_writeValue = _tuplaExpr;
 						}
 					|

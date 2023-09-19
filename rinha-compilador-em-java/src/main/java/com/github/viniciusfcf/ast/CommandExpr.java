@@ -2,26 +2,37 @@ package com.github.viniciusfcf.ast;
 
 public class CommandExpr extends AbstractCommand {
 
-	private String cmd1;
-	private String op;
-	private String cmd2;
+	private final String cmd1;
+	private final String op;
+	private final String cmd2;
+	private final boolean metodoInterno;
 
-	public CommandExpr(String cmd1, String op, String cmd2) {
+
+	public CommandExpr(String cmd1, String op, String cmd2, boolean metodoInterno) {
 		this.cmd1 = cmd1;
 		this.op = op;
 		this.cmd2 = cmd2;
+		this.metodoInterno = metodoInterno;
 	}
 	
-	public CommandExpr(String cmd1) {
-		this.cmd1 = cmd1;
+	public CommandExpr(String cmd1, boolean metodoInterno) {
+		this(cmd1, null, null, metodoInterno);
 	}
 
 	@Override
 	public String generateJavaCode() {
+		String retorno = null;
 		if(cmd2 == null) {
-			return "return " + cmd1+";";
+			retorno = cmd1+";";
+		}else {
+			retorno = cmd1 + op + cmd2;
+				
 		}
-		return "return " + cmd1 + op + cmd2;
+		
+		if(metodoInterno) {
+			return "return " + retorno;
+		}
+		return retorno;
 	}
 
 	@Override
