@@ -1,12 +1,23 @@
-Ex de uma gramática
-/home/vinicius/desenvolvimento/my-antlr4/SimpleAntlrMavenProject/
 
-# Compilar a gramática
+## Como empacotar
 
 ```
-mvn antlr4:antlr4 
+mvn clean package
 ```
 
-Fontes:
+## Gerar container com versão java
 
-https://github.com/professorisidro/IsiLanguageEmbriao
+```
+./build-java-image.sh
+```
+
+## Executar versão java
+
+./run-java-image.sh <FILE>
+
+
+Ex:
+```
+./run-java-image.sh examples/sum.rinha
+
+```

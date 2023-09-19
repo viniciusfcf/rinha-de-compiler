@@ -1,0 +1,1 @@
+docker run -it -v ./examples:/app/build/examples/ viniciusfcf-java-compiler $1

@@ -1,7 +1,5 @@
 package com.github.viniciusfcf.ast;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 
 import com.github.viniciusfcf.datastructures.IsiMethod;
@@ -33,13 +31,13 @@ public class IsiProgram {
 		str.append("}");
 		
 		String codigoGerado = str.toString();
-		try (FileWriter fr = new FileWriter(new File("/home/vinicius/desenvolvimento/rinha-de-compiler/rinha-compilador-em-java/src/main/java/MainClass.java"));
-				){
-			fr.write(codigoGerado);
-		}
-		catch(Exception ex) {
-			ex.printStackTrace();
-		}
+//		try (FileWriter fr = new FileWriter(new File("/home/vinicius/desenvolvimento/rinha-de-compiler/rinha-compilador-em-java/src/main/java/MainClass.java"));
+//				){
+//			fr.write(codigoGerado);
+//		}
+//		catch(Exception ex) {
+//			ex.printStackTrace();
+//		}
 		
 		return codigoGerado;
 

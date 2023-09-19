@@ -31,16 +31,12 @@ public class MyClassGenerator {
 
 	static final String className = "MainClass";
 	
-//	Tupla t;
-	
-	static Path temp = Paths.get(System.getProperty("java.io.tmpdir"), className);
-	
-	
 	public static void main(String[] args) throws Exception {
 		
 		if(args.length == 0) {
 			args = new String[] {"input.rinha"};
 		}
+//		System.out.println(Arrays.toString(args));
 		
 		RinhaLangLexer lexer = new RinhaLangLexer(CharStreams.fromFileName(args[0]));
 		
@@ -56,10 +52,10 @@ public class MyClassGenerator {
 		
 		String code = parser.generateCode();
         
-        
-		compile(code);
+		var directory = Files.createTempDirectory("");
+		compile(directory, code);
 		
-		Class<?> javaDemoClass = load();
+		Class<?> javaDemoClass = load(directory);
 		run(javaDemoClass, "run"); 
 	}	
 
@@ -69,10 +65,10 @@ public class MyClassGenerator {
 		method.invoke(null);
 	}
 
-	private static Class<?> load() throws ClassNotFoundException, IOException {
+	private static Class<?> load(Path file) throws ClassNotFoundException, IOException {
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 		try(URLClassLoader urlClassLoader = new URLClassLoader(
-				new URL[] { temp.toUri().toURL() },
+				new URL[] { file.toUri().toURL() },
 				classLoader);) {
 			Class<?> javaDemoClass = urlClassLoader.loadClass(className);
 			return javaDemoClass;
@@ -80,42 +76,40 @@ public class MyClassGenerator {
 		
 	}
 	
-	public static void compile(String code) throws Exception {
+	public static void compile(Path file, String code) throws Exception {
 		
-		Files.createDirectories(temp);
+		Files.createDirectories(file);
 		
-		Path javaSourceFile = Paths.get(temp.normalize().toAbsolutePath().toString(), className + ".java");
-		
+		Path javaSourceFile = Paths.get(file.normalize().toAbsolutePath().toString(), className + ".java");
 		Files.write(javaSourceFile, code.getBytes());
 		
 		File[] files1 = {javaSourceFile.toFile()};
 		
 		// Get the compiler
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-		Iterable<? extends JavaFileObject> compilationUnits =
-				fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files1));
-		// A feedback object (diagnostic) to get errors
-		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-		// Compilation unit can be created and called only once
-		JavaCompiler.CompilationTask task = compiler.getTask(
-				null,
-				fileManager,
-				diagnostics,
-				null,
-				null,
-				compilationUnits
-		);
-		// The compile task is called
-		task.call();
-		// Printing of any compile problems
-		for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
-			System.out.format("Error on line %d in %s%n %s",
-					diagnostic.getLineNumber(),
-					diagnostic.getSource(),
-					diagnostic.getMessage(Locale.US));
+		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);) {
+			Iterable<? extends JavaFileObject> compilationUnits =
+					fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files1));
+			// A feedback object (diagnostic) to get errors
+			DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+			// Compilation unit can be created and called only once
+			JavaCompiler.CompilationTask task = compiler.getTask(
+					null,
+					fileManager,
+					diagnostics,
+					null,
+					null,
+					compilationUnits
+					);
+			// The compile task is called
+			task.call();
+			// Printing of any compile problems
+			for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
+				System.err.format("Error on line %d in %s%n %s",
+						diagnostic.getLineNumber(),
+						diagnostic.getSource(),
+						diagnostic.getMessage(Locale.US));
+			}
 		}
-		// Close the compile resources
-		fileManager.close();
 	}
 }
