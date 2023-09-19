@@ -129,7 +129,7 @@ termo		: ID {
 
 cmdexpr: (cmdcall{System.out.println("cmdcall na expr1");_cmdexpr1 = stack.peek().remove(stack.peek().size()-1);}) (OP | OPREL){_cmdexprop = _input.LT(-1).getText();} (cmdcall{System.out.println("cmdcall na expr2");_cmdexpr2 = stack.peek().remove(stack.peek().size()-1);})
 	{
-		CommandExpr cmd = new CommandExpr(_cmdexpr1, _cmdexprop, _cmdexpr1);
+		CommandExpr cmd = new CommandExpr(_cmdexpr1, _cmdexprop, _cmdexpr2);
               	stack.peek().add(cmd);
               	System.out.println("CMDEXPR: "+ cmd.generateJavaCode());
 	}
@@ -247,7 +247,6 @@ cmdselecao  :  'if'{
             ;
 
 			
-// TODO n ta do jeito que quero, mas ok
 tupla   : AP (ID | NUMBER){_tuplaContent1 =_input.LT(-1).getText();} VIR (ID | NUMBER){_tuplaContent2 = _input.LT(-1).getText();} FP {_tuplaExpr = "new Tupla("+_tuplaContent1+","+ _tuplaContent2+")";}
 		;
 LET : 'let'

@@ -13,7 +13,7 @@ public class IsiProgram {
 
 	public String generateTarget() {
 		StringBuilder str = new StringBuilder();
-		str.append("import com.github.viniciusfcf.Tupla;\n");
+//		str.append("import com.github.viniciusfcf.Tupla;\n");
 		str.append("public class MainClass{ \n");
 		str.append("  public static void main(String args[]){\n ");
 		str.append("  run();\n } \n");
@@ -29,6 +29,7 @@ public class IsiProgram {
 			str.append(command.generateJavaCode()+"\n");
 		}
 		str.append("  }");
+		str.append(classeTupla());
 		str.append("}");
 		
 		String codigoGerado = str.toString();
@@ -42,6 +43,45 @@ public class IsiProgram {
 		
 		return codigoGerado;
 
+	}
+
+	private String classeTupla() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n static class Tupla {")
+		.append("Object first;")
+		.append("Object second;")
+
+		.append("public Tupla() {")
+
+		.append("}")
+
+		.append("public Tupla(Object first, Object second) {")
+		.append("this.first = first;")
+		.append("this.second = second;")
+		.append("}")
+
+		.append("public Object getFirst() {")
+		.append("return first;")
+		.append("}")
+
+		.append("public void setFirst(Object first) {")
+		.append("this.first = first;")
+		.append("}")
+
+		.append("public Object getSecond() {")
+		.append("return second;")
+		.append("}")
+
+		.append("public void setSecond(Object second) {")
+		.append("this.second = second;")
+		.append("}")
+
+		.append("@Override\n")
+		.append("public String toString() {")
+		.append("return \"(\" + first + \", \" + second + \")\";")
+		.append("}")
+	.append("}");
+		return sb.toString();
 	}
 
 	private String metodos() {
@@ -60,6 +100,9 @@ public class IsiProgram {
 					for (AbstractCommand command : m.getCommands()) {
 						sb.append(command.generateJavaCode()+"\n");
 					}
+					
+					
+					
 					
 					sb.append("}\n");
 		}
