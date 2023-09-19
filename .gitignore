@@ -1,3 +1,4 @@
-/target
-
-.idea
+/target/
+/src/main/java/com/github/viniciusfcf/generated/*.interp
+/src/main/java/com/github/viniciusfcf/generated/*.tokens
+/src/main/java/com/github/viniciusfcf/generated/*.java
