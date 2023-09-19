@@ -1,0 +1,42 @@
+let fib = fn (n, m, o) => {
+print(true)
+print(3)
+if ( n Gte m ) {
+     print (n)
+     fib(1,2,3)
+     
+  }
+  
+};
+  
+
+let b= 1;
+let a= 1 + 2 * 3 / b;
+
+  
+  
+fib(a,a,a)
+print((1,2))
+  if ( a Gte b ) {
+     print (a)
+  }
+  else {
+     print (b)
+  }
+  
+  if ( 1 Gte 2 ) {
+     print (a)
+  }
+  else {
+     print (b)
+  }
+  
+   if (true) {
+     print (a)
+  }
+  
+print(1)
+print("a")
+print(true)
+print(false)
+print(2332)

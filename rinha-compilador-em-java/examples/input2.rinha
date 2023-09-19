@@ -1,0 +1,2 @@
+combination(n - 1, k - 1) + combination(n - 1, k)
+n + combination(n - 1, k - 1)
