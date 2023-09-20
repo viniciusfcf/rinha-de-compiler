@@ -1,15 +1,22 @@
+## Minha humilde submissão
+
+Minha humilde submissão para rinha utilizando Java. Está cheia de limitações, mas aparentemente a parte que funciona está com um desempenho bom.
+
+## TODO
+
+- Closure
+- As funções só funcionam com parâmetros e retornos Integer
+- Compilar dentro de container
+- Criar arquivo CDS para melhor startup
+- Utilizar GC ZGC
+- Cache do resultado de funções
+
 ## Agradecimentos e principal fonte de conhecimento e de cópia da versão inicial =)
 
 https://github.com/professorisidro/IsiLanguageEmbriao
 
 
-## Como empacotar
-
-```
-mvn clean package
-```
-
-## Gerar container com versão java
+## Gerar imagem
 
 ```
 ./build-java-image.sh
@@ -21,6 +28,7 @@ mvn clean package
 
 
 Ex:
+
 ```
 ./run-java-image.sh examples/sum.rinha
 
@@ -30,11 +38,6 @@ Ex:
 
 É necessário copiar o arquivo para a pasta "examples", será montado um volume no momento da execução do container
 
+## Limitações
 
-# Native Mode (WIP)
-
-
-## Install GRAALVM
-
-Follow: https://github.com/graalvm/graalvm-ce-builds/releases
-
+- Só funciona se os parâmetros das funções e seus retornos forem Integer (se tiver tempo tentarei deixar genérico)
