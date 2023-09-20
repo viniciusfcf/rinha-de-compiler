@@ -11,6 +11,7 @@ Minha humilde submissão para rinha utilizando Java. Está cheia de limitações
 ## Agradecimentos e principal fonte de conhecimento e de cópia da versão inicial =)
 
 https://github.com/professorisidro/IsiLanguageEmbriao
+https://www.youtube.com/playlist?list=PLjcmNukBom6--0we1zrpoUE2GuRD-Me6W
 
 
 ## Gerar imagem
