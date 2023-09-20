@@ -42,7 +42,6 @@ public class MyClassGenerator {
 		if(args.length == 0) {
 			args = new String[] {"examples/input.rinha"};
 		}
-//		System.out.println(Arrays.toString(args));
 		
 		RinhaLangLexer lexer = new RinhaLangLexer(CharStreams.fromFileName(args[0]));
 		
@@ -52,12 +51,9 @@ public class MyClassGenerator {
         // create a parser that feeds off the tokens buffer
         RinhaLangParser parser = new RinhaLangParser(tokens);
 
-        ParseTree tree = parser.prog(); // begin parsing at init rule
-//        parser.exibeMetodos();
-//        parser.exibeComandos();
+        ParseTree tree = parser.prog(); 
 		
 		String code = parser.generateCode();
-        
 		
 		directory = Files.createTempDirectory("");
 		compile(directory, code);
@@ -74,8 +70,6 @@ public class MyClassGenerator {
 
 	private static Class<?> load(Path file) throws ClassNotFoundException, IOException {
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-//		System.out.println("PATH: "+ file);
-//		System.out.println("PATH: "+ pathTuplaClass);
 		
 		try(URLClassLoader urlClassLoader = new URLClassLoader(
 				new URL[] { directory.toUri().toURL()},
