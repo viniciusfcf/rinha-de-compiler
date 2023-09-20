@@ -27,11 +27,11 @@ public class IsiProgram {
 			str.append(command.generateJavaCode()+"\n");
 		}
 		str.append("  }");
-		str.append(classeTupla());
+		str.append(metodosDefault());
 		str.append("}");
 		
 		String codigoGerado = str.toString();
-//		try (FileWriter fr = new FileWriter(new File("/home/vinicius/desenvolvimento/rinha-de-compiler/rinha-compilador-em-java/src/main/java/MainClass.java"));
+//		try (FileWriter fr = new FileWriter(new File("/home/vinicius/desenvolvimento/rinha-de-compiler/src/main/java/MainClass.java"));
 //				){
 //			fr.write(codigoGerado);
 //		}
@@ -43,44 +43,31 @@ public class IsiProgram {
 
 	}
 
-	private String classeTupla() {
+	private Object metodosDefault() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n static class Tupla {")
-		.append("Object first;")
-		.append("Object second;")
-
-		.append("public Tupla() {")
-
-		.append("}")
-
-		.append("public Tupla(Object first, Object second) {")
-		.append("this.first = first;")
-		.append("this.second = second;")
-		.append("}")
-
-		.append("public Object getFirst() {")
-		.append("return first;")
-		.append("}")
-
-		.append("public void setFirst(Object first) {")
-		.append("this.first = first;")
-		.append("}")
-
-		.append("public Object getSecond() {")
-		.append("return second;")
-		.append("}")
-
-		.append("public void setSecond(Object second) {")
-		.append("this.second = second;")
-		.append("}")
-
-		.append("@Override\n")
-		.append("public String toString() {")
-		.append("return \"(\" + first + \", \" + second + \")\";")
-		.append("}")
-	.append("}");
+		sb.append("""
+				
+				public static Object first(Object o) {
+					if(o instanceof Tupla) {
+						Tupla t = (Tupla) o;
+						return t.first;
+					}
+					throw new RuntimeException("first: Não é uma Tupla Sr.");
+				}
+				
+				public static Object second(Object o) {
+					if(o instanceof Tupla) {
+						Tupla t = (Tupla) o;
+						return t.second;
+					}
+					throw new RuntimeException("second: Não é uma Tupla Sr.");
+				}
+				
+				
+				""");
 		return sb.toString();
 	}
+
 
 	private String metodos() {
 		StringBuilder sb = new StringBuilder();

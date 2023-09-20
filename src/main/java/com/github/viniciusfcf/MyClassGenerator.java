@@ -31,10 +31,16 @@ public class MyClassGenerator {
 
 	static final String className = "MainClass";
 	
+	static Path tuplaClass = Path.of("/app/build/Tupla.java");
+
+	private static Path pathTuplaClass;
+
+	private static Path directory;
+	
 	public static void main(String[] args) throws Exception {
 		
 		if(args.length == 0) {
-			args = new String[] {"input.rinha"};
+			args = new String[] {"examples/input.rinha"};
 		}
 //		System.out.println(Arrays.toString(args));
 		
@@ -52,7 +58,8 @@ public class MyClassGenerator {
 		
 		String code = parser.generateCode();
         
-		var directory = Files.createTempDirectory("");
+		
+		directory = Files.createTempDirectory("");
 		compile(directory, code);
 		
 		Class<?> javaDemoClass = load(directory);
@@ -67,8 +74,11 @@ public class MyClassGenerator {
 
 	private static Class<?> load(Path file) throws ClassNotFoundException, IOException {
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+//		System.out.println("PATH: "+ file);
+//		System.out.println("PATH: "+ pathTuplaClass);
+		
 		try(URLClassLoader urlClassLoader = new URLClassLoader(
-				new URL[] { file.toUri().toURL() },
+				new URL[] { directory.toUri().toURL()},
 				classLoader);) {
 			Class<?> javaDemoClass = urlClassLoader.loadClass(className);
 			return javaDemoClass;
@@ -80,18 +90,23 @@ public class MyClassGenerator {
 		
 		Files.createDirectories(file);
 		
+		Path pathTuplaJava = new File(file.toFile(), "Tupla.java").toPath();
+		pathTuplaClass = new File(file.toFile(), "Tupla.class").toPath();
+		Files.copy(tuplaClass, pathTuplaJava);
+		
 		Path javaSourceFile = Paths.get(file.normalize().toAbsolutePath().toString(), className + ".java");
 		Files.write(javaSourceFile, code.getBytes());
 		
-		File[] files1 = {javaSourceFile.toFile()};
+		File[] files1 = {javaSourceFile.toFile(), pathTuplaJava.toFile()};
 		
 		// Get the compiler
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);) {
+		// A feedback object (diagnostic) to get errors
+					DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+					
+		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);) {
 			Iterable<? extends JavaFileObject> compilationUnits =
 					fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files1));
-			// A feedback object (diagnostic) to get errors
-			DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 			// Compilation unit can be created and called only once
 			JavaCompiler.CompilationTask task = compiler.getTask(
 					null,
