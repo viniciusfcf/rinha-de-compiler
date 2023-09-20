@@ -6,9 +6,6 @@ Minha humilde submissão para rinha utilizando Java. Está cheia de limitações
 
 - Closure
 - As funções só funcionam com parâmetros e retornos Integer
-- Compilar dentro de container
-- Criar arquivo CDS para melhor startup
-- Utilizar GC ZGC
 - Cache do resultado de funções
 
 ## Agradecimentos e principal fonte de conhecimento e de cópia da versão inicial =)
