@@ -58,7 +58,7 @@ public class MyClassGenerator {
 		
 		String code = parser.generateCode();
 		
-		directory = Files.createTempDirectory("");
+		directory = Files.createTempDirectory(Path.of("/app/build/examples"), "executions");
 		compile(directory, code);
 		
 		Class<?> javaDemoClass = load(directory);

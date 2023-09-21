@@ -85,7 +85,11 @@ public class IsiProgram {
 					}
 					throw new RuntimeException("second: Não é uma Tupla Sr.");
 				}
-				
+				public static String print(Object obj) {
+					String str = obj.toString();
+					System.out.println(str);
+					return str;
+				}
 				
 				""");
 		return sb.toString();
