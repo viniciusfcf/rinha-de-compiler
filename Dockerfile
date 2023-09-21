@@ -22,5 +22,5 @@ ENV JAVA_OPTS "-Xms1024M -Xmx2048M -XX:+UseG1GC \
 			-XX:MaxHeapFreeRatio=90 \
 			-Djava.lang.Integer.IntegerCache.high=1000000  \
 		"
-ENTRYPOINT [ "java", "-Xss16M", "-jar", "app.jar"]
+ENTRYPOINT [ "java", "-Xss128M", "-jar", "app.jar"]
 CMD ["examples/print.rinha"]

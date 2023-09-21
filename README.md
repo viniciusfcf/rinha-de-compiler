@@ -6,6 +6,8 @@ Minha humilde submissão para rinha utilizando Java. Está cheia de limitações
 
 - Closure
 - As funções só funcionam com parâmetros e retornos Integer (se tiver tempo tentarei deixar genérico)
+- Funcao dentro de funcao
+- Funcao sem { e }
 
 ## Agradecimentos e principal fonte de conhecimento e de cópia da versão inicial =)
 
