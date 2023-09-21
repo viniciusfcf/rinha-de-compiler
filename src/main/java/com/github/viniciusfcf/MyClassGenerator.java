@@ -9,7 +9,9 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import javax.tools.Diagnostic;
@@ -31,9 +33,9 @@ public class MyClassGenerator {
 
 	static final String className = "MainClass";
 	
-	static Path tuplaClass = Path.of("/app/build/Tupla.java");
+	static Path[] javaToAdd = {Path.of("/app/build/Tupla.java"), Path.of("/app/build/MyMapKey.java")};
 
-	private static Path pathTuplaClass;
+	private static Path[] classesToAdd = new Path[javaToAdd.length];
 
 	private static Path directory;
 	
@@ -52,6 +54,7 @@ public class MyClassGenerator {
         RinhaLangParser parser = new RinhaLangParser(tokens);
 
         ParseTree tree = parser.prog(); 
+        
 		
 		String code = parser.generateCode();
 		
@@ -84,14 +87,21 @@ public class MyClassGenerator {
 		
 		Files.createDirectories(file);
 		
-		Path pathTuplaJava = new File(file.toFile(), "Tupla.java").toPath();
-		pathTuplaClass = new File(file.toFile(), "Tupla.class").toPath();
-		Files.copy(tuplaClass, pathTuplaJava);
+		List<File> filesToClassPath = new ArrayList<>();
+		for (int i = 0; i < javaToAdd.length; i++) {
+			Path path = javaToAdd[i];
+			
+			File javaSourceFile = new File(file.toFile(), path.toFile().getName());
+			Path pathTuplaJava = javaSourceFile.toPath();
+			Files.copy(path, pathTuplaJava);
+			filesToClassPath.add(javaSourceFile);
+		
+		}
+		
 		
 		Path javaSourceFile = Paths.get(file.normalize().toAbsolutePath().toString(), className + ".java");
 		Files.write(javaSourceFile, code.getBytes());
-		
-		File[] files1 = {javaSourceFile.toFile(), pathTuplaJava.toFile()};
+		filesToClassPath.add(javaSourceFile.toFile());
 		
 		// Get the compiler
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -100,7 +110,7 @@ public class MyClassGenerator {
 					
 		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);) {
 			Iterable<? extends JavaFileObject> compilationUnits =
-					fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files1));
+					fileManager.getJavaFileObjectsFromFiles(filesToClassPath);
 			// Compilation unit can be created and called only once
 			JavaCompiler.CompilationTask task = compiler.getTask(
 					null,

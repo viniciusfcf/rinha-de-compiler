@@ -11,8 +11,18 @@ public class IsiProgram {
 
 	public String generateTarget() {
 		StringBuilder str = new StringBuilder();
-//		str.append("import com.github.viniciusfcf.Tupla;\n");
+		str.append("""
+				import java.util.HashMap;
+				import java.util.Map;
+
+				""");
 		str.append("public class MainClass{ \n");
+		
+		str.append("static Map<MyMapKey, Integer> cache = new HashMap<>(100_000); \n");
+		
+		str.append(cacheMethods());
+		
+		
 		str.append("  public static void main(String args[]){\n ");
 		str.append("  run();\n } \n");
 		
@@ -41,6 +51,19 @@ public class IsiProgram {
 		
 		return codigoGerado;
 
+	}
+
+	private String cacheMethods() {
+		return """
+				public static Integer getFromCache(String methodName, Object[] parameters) {
+					return cache.get(new MyMapKey(methodName, parameters));
+				}
+				
+				public static Integer putInCache(String methodName, Object[] parameters, Integer value) {
+					cache.put(new MyMapKey(methodName, parameters), value);
+					return value;
+				}
+				""";
 	}
 
 	private Object metodosDefault() {
@@ -76,12 +99,19 @@ public class IsiProgram {
 					.append(m.getName())
 					.append("(")
 					;
-					StringBuilder params = new StringBuilder();
+					StringBuilder paramsComTipo = new StringBuilder();
+					StringBuilder paramsSemTipo = new StringBuilder();
+					
 					for (String p : m.getParameters()) {
-						params.append(",Integer "+p);
+						paramsComTipo.append(",Integer ").append(p);
+						paramsSemTipo.append(",").append(p);
 					}
-					sb.append(params.deleteCharAt(0));
+					StringBuilder parameters = paramsComTipo.deleteCharAt(0);
+					sb.append(parameters);
 					sb.append(") {\n");
+					
+					sb.append(cacheVerification(m.getName(), paramsSemTipo.deleteCharAt(0).toString()));
+					
 					for (AbstractCommand command : m.getCommands()) {
 						sb.append(command.generateJavaCode()+"\n");
 					}
@@ -92,6 +122,18 @@ public class IsiProgram {
 					sb.append("}\n");
 		}
 		return sb.toString();
+	}
+
+	private String cacheVerification(String name, String parameters) {
+		StringBuilder sb = new StringBuilder();
+				sb.append("var cached = getFromCache(\""+name+"\", new Object[] {").append(parameters).append("});")
+				.append("""
+						if(cached != null) {
+							return cached;
+						}
+						
+						""");
+				return sb.toString();
 	}
 
 	public ArrayList<AbstractCommand> getComandos() {
