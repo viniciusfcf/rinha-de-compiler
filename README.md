@@ -6,14 +6,12 @@ Minha humilde submissão para rinha utilizando Java. Está cheia de limitações
 
 - Closure
 - As funções só funcionam com parâmetros e retornos Integer
-- Compilar dentro de container
-- Criar arquivo CDS para melhor startup
-- Utilizar GC ZGC
 - Cache do resultado de funções
 
 ## Agradecimentos e principal fonte de conhecimento e de cópia da versão inicial =)
 
 https://github.com/professorisidro/IsiLanguageEmbriao
+https://www.youtube.com/playlist?list=PLjcmNukBom6--0we1zrpoUE2GuRD-Me6W
 
 
 ## Gerar imagem

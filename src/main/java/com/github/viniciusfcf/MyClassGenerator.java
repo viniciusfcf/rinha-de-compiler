@@ -9,7 +9,9 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import javax.tools.Diagnostic;
@@ -31,9 +33,9 @@ public class MyClassGenerator {
 
 	static final String className = "MainClass";
 	
-	static Path tuplaClass = Path.of("/app/build/Tupla.java");
+	static Path[] javaToAdd = {Path.of("/app/build/Tupla.java"), Path.of("/app/build/MyMapKey.java")};
 
-	private static Path pathTuplaClass;
+	private static Path[] classesToAdd = new Path[javaToAdd.length];
 
 	private static Path directory;
 	
@@ -42,7 +44,6 @@ public class MyClassGenerator {
 		if(args.length == 0) {
 			args = new String[] {"examples/input.rinha"};
 		}
-//		System.out.println(Arrays.toString(args));
 		
 		RinhaLangLexer lexer = new RinhaLangLexer(CharStreams.fromFileName(args[0]));
 		
@@ -52,14 +53,12 @@ public class MyClassGenerator {
         // create a parser that feeds off the tokens buffer
         RinhaLangParser parser = new RinhaLangParser(tokens);
 
-        ParseTree tree = parser.prog(); // begin parsing at init rule
-//        parser.exibeMetodos();
-//        parser.exibeComandos();
-		
-		String code = parser.generateCode();
+        ParseTree tree = parser.prog(); 
         
 		
-		directory = Files.createTempDirectory("");
+		String code = parser.generateCode();
+		
+		directory = Files.createTempDirectory(Path.of("/app/build/examples"), "executions");
 		compile(directory, code);
 		
 		Class<?> javaDemoClass = load(directory);
@@ -74,8 +73,6 @@ public class MyClassGenerator {
 
 	private static Class<?> load(Path file) throws ClassNotFoundException, IOException {
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-//		System.out.println("PATH: "+ file);
-//		System.out.println("PATH: "+ pathTuplaClass);
 		
 		try(URLClassLoader urlClassLoader = new URLClassLoader(
 				new URL[] { directory.toUri().toURL()},
@@ -90,14 +87,21 @@ public class MyClassGenerator {
 		
 		Files.createDirectories(file);
 		
-		Path pathTuplaJava = new File(file.toFile(), "Tupla.java").toPath();
-		pathTuplaClass = new File(file.toFile(), "Tupla.class").toPath();
-		Files.copy(tuplaClass, pathTuplaJava);
+		List<File> filesToClassPath = new ArrayList<>();
+		for (int i = 0; i < javaToAdd.length; i++) {
+			Path path = javaToAdd[i];
+			
+			File javaSourceFile = new File(file.toFile(), path.toFile().getName());
+			Path pathTuplaJava = javaSourceFile.toPath();
+			Files.copy(path, pathTuplaJava);
+			filesToClassPath.add(javaSourceFile);
+		
+		}
+		
 		
 		Path javaSourceFile = Paths.get(file.normalize().toAbsolutePath().toString(), className + ".java");
 		Files.write(javaSourceFile, code.getBytes());
-		
-		File[] files1 = {javaSourceFile.toFile(), pathTuplaJava.toFile()};
+		filesToClassPath.add(javaSourceFile.toFile());
 		
 		// Get the compiler
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -106,7 +110,7 @@ public class MyClassGenerator {
 					
 		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);) {
 			Iterable<? extends JavaFileObject> compilationUnits =
-					fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files1));
+					fileManager.getJavaFileObjectsFromFiles(filesToClassPath);
 			// Compilation unit can be created and called only once
 			JavaCompiler.CompilationTask task = compiler.getTask(
 					null,
