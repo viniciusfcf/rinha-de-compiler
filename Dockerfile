@@ -18,8 +18,9 @@ WORKDIR /app/build
 
 ENV JAVA_OPTS "-Xms1024M -Xmx2048M -XX:+UseG1GC \
 			-XX:+UseNUMA \
+			-Xss16M \ 
 			-XX:MaxHeapFreeRatio=90 \
 			-Djava.lang.Integer.IntegerCache.high=1000000  \
 		"
-ENTRYPOINT [ "java", "-jar", "app.jar"]
+ENTRYPOINT [ "java", "-Xss128M", "-jar", "app.jar"]
 CMD ["examples/print.rinha"]

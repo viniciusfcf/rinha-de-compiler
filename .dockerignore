@@ -1,0 +1,8 @@
+examples/executions*
+target
+*pdf
+.classpath
+*.sh
+README.md
+.settings
+.git
