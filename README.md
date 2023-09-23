@@ -1,6 +1,6 @@
 ## Minha humilde submissão
 
-Minha humilde submissão para rinha utilizando Java. Está cheia de limitações, mas aparentemente a parte que funciona está com um desempenho bom.
+Minha humilde submissão para rinha utilizando Java. Está cheia de limitações, mas aparentemente a parte que funciona está com um desempenho bom. Fiz o projeto para não ficar de fora da rinha e para aprender sobre [ANTR](https://www.antlr.org/). Gostei do resultado final? Não! No arquivo g4 fica muito código java misturado com a definição da gramática. Aparentemente se eu tivesse utilizado o json para produzir a classe Java final ficaria mais organizado e conseguiria atender os requisitos sem apanhar tanto quanto apanhei.
 
 ## TODO
 
