@@ -57,7 +57,7 @@ public class MyClassGenerator {
         
 		
 		String code = parser.generateCode();
-		
+		Path.of("/app/build/examples").toFile().mkdirs();
 		directory = Files.createTempDirectory(Path.of("/app/build/examples"), "executions");
 		compile(directory, code);
 		
