@@ -24,13 +24,10 @@ https://www.youtube.com/playlist?list=PLjcmNukBom6--0we1zrpoUE2GuRD-Me6W
 
 ## Executar versão java
 
-./run-java-image.sh <FILE>
-
-
 Ex:
 
 ```
-./run-java-image.sh examples/sum.rinha
+docker run --memory=2g --cpus=2  -it -v ./examples/fib.rinha:/var/rinha/source.rinha.json  viniciusfcf-java-compiler
 
 ```
 
